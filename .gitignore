@@ -5,8 +5,17 @@
 
 # Compiled Dynamic libraries
 *.so
+*.dylib
+*.dll
 
 # Compiled Static libraries
 *.lai
 *.la
 *.a
+.project
+.cproject
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+CTestTestfile.cmake
+CMakeFiles/
