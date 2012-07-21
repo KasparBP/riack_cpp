@@ -20,6 +20,7 @@
 
 #include "RiackCpp.h"
 #include "String.h"
+#include "Content.h"
 
 namespace Riak {
 
@@ -27,11 +28,21 @@ class Bucket;
 
 class Object {
 public:
-	Object(Bucket *bucket);
+	Object(Bucket *bucket, const String& key);
 	virtual ~Object();
+
+	void setValue(uint8_t *value, size_t valueLength);
+	bool store();
+
+	void setContentType(const String& contentType);
 private:
+	void reset();
 	Bucket *bucket;
 	String key;
+	String contentType;
+
+	size_t valueLength;
+	uint8_t *value;
 };
 
 } /* namespace Riak */

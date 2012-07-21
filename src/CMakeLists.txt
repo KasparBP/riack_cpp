@@ -15,7 +15,8 @@ set(LIBS ${LIBS} ${RIACK_LIBRARIES})
 SET(RIACKCPP_SRC	Client.cpp
 					Bucket.cpp
 					Object.cpp
-					String.cpp)
+					String.cpp
+					Content.cpp)
 
 # SET(TESTS_MAIN_SRC	)
 

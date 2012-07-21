@@ -14,16 +14,50 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
+
 #include "Object.h"
 #include "Bucket.h"
 
 namespace Riak {
 
-Object::Object(Bucket *bucket) {
+Object::Object(Bucket *bucket, const String& key) {
 	this->bucket = bucket;
+	this->key = key;
+	reset();
 }
 
 Object::~Object() {
+	reset();
+}
+
+void Object::setContentType(const String& contentType) {
+	this->contentType = contentType;
+}
+
+void Object::reset() {
+	if (value != 0 && valueLength > 0) {
+		delete [] value;
+	}
+	value = 0;
+	valueLength = 0;
+}
+
+void Object::setValue(uint8_t *value, size_t valueLength) {
+	reset();
+	this->valueLength = valueLength;
+	this->value = new uint8_t[valueLength];
+	memcpy(this->value, value, valueLength);
+}
+
+bool Object::store() {
+	struct RIACK_OBJECT obj;
+	struct RIACK_CONTENT content;
+	content.content_type = contentType.getAsRiackString();
+	obj.bucket = bucket->getName().getAsRiackString();
+	obj.key = key.getAsRiackString();
+	obj.content_count = 1;
+
+	return true;
 }
 
 } /* namespace Riak */

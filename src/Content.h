@@ -15,27 +15,16 @@
    limitations under the License.
 */
 
-#ifndef RIACKCPP__STRING_H__
-#define RIACKCPP__STRING_H__
-
-#include "RiackCpp.h"
-#include <string>
+#ifndef CONTENT_H_
+#define CONTENT_H_
 
 namespace Riak {
 
-class String {
+class Content {
 public:
-	String();
-	String(const std::string& str);
-	String(const String& str);
-	virtual ~String();
-
-	void setValue(const std::string& value);
-	const RIACK_STRING& getAsRiackString() const;
-private:
-	void reset();
-	RIACK_STRING riackString;
+	Content();
+	virtual ~Content();
 };
 
 } /* namespace Riak */
-#endif /* RIACKCPP__STRING_H__ */
+#endif /* CONTENT_H_ */

@@ -19,8 +19,9 @@
 
 namespace Riak {
 
-Bucket::Bucket(Client *client) {
+Bucket::Bucket(Client *client, const String& name) {
 	this->client = client;
+	this->name = name;
 }
 
 Bucket::~Bucket() {
@@ -28,6 +29,10 @@ Bucket::~Bucket() {
 
 Client* Bucket::getClient() {
 	return client;
+}
+
+const String& Bucket::getName() const {
+	return name;
 }
 
 } /* namespace Riak */

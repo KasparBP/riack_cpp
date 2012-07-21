@@ -17,17 +17,21 @@
 #ifndef RIACKCPP_BUCKET_H_
 #define RIACKCPP_BUCKET_H_
 
+#include "String.h"
+
 namespace Riak {
 
 class Client;
 
 class Bucket {
 public:
-	Bucket(Client *client);
+	Bucket(Client *client, const String& name);
 	virtual ~Bucket();
 
+	const String& getName() const;
 	Client* getClient();
 private:
+	String name;
 	Client *client;
 };
 

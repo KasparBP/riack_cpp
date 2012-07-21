@@ -41,9 +41,9 @@ String::~String() {
 void String::reset() {
 	if (riackString.value != 0 && riackString.len > 0) {
 		delete [] riackString.value;
-		riackString.value = 0;
-		riackString.len = 0;
 	}
+	riackString.value = 0;
+	riackString.len = 0;
 }
 
 void String::setValue(const std::string& value) {
@@ -53,6 +53,10 @@ void String::setValue(const std::string& value) {
 		riackString.value = new char[value.length()];
 		memcpy(riackString.value, value.c_str(), value.length());
 	}
+}
+
+const RIACK_STRING& String::getAsRiackString() const {
+	return riackString;
 }
 
 } /* namespace Riak */
