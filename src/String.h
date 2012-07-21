@@ -14,22 +14,27 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef RIACKCPP_BUCKET_H_
-#define RIACKCPP_BUCKET_H_
+
+#ifndef RIACKCPP__STRING_H__
+#define RIACKCPP__STRING_H__
+
+#include "RiackCpp.h"
+#include <string>
 
 namespace Riak {
 
-class Client;
-
-class Bucket {
+class String {
 public:
-	Bucket(Client *client);
-	virtual ~Bucket();
+	String();
+	String(const std::string& str);
+	String(const String& str);
+	virtual ~String();
 
-	Client* getClient();
+	void setValue(const std::string& value);
 private:
-	Client *client;
+	void reset();
+	RIACK_STRING riackString;
 };
 
 } /* namespace Riak */
-#endif /* RIACKCPP_BUCKET_H_ */
+#endif /* RIACKCPP__STRING_H__ */
