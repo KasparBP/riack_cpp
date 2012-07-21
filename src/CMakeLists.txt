@@ -10,6 +10,7 @@ SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/Modules/
 
 find_package(riack REQUIRED)
 include_directories(${RIACK_INCLUDE_DIRS})
+set(LIBS ${LIBS} ${RIACK_LIBRARIES})
 
 SET(RIACKCPP_SRC	Client.cpp)
 

@@ -7,15 +7,18 @@
 
 #include "Client.h"
 
-namespace Riack {
+namespace Riak {
 
-Client::Client() {
-	// TODO Auto-generated constructor stub
+Client::Client(const std::string& host, int port) {
+	this->host = host;
+	this->port = port;
+	connected = false;
 
+	client = ::riack_new_client(0);
 }
 
 Client::~Client() {
-	// TODO Auto-generated destructor stub
+	riack_free(client);
 }
 
-} /* namespace Riack */
+} /* namespace Riak */

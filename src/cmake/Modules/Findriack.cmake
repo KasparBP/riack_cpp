@@ -1,22 +1,19 @@
 # - Try to find riack
 # Once done this will define
 #
-#  RIACK_FOUND - system has ProtoBufC
-#  RIACK_INCLUDE_DIR - the ProtoBufC include directory
-#  RIACK_LIBRARIES - Link these to use ProtoBufC
-#  RIACK_DEFINITIONS - Compiler switches required for using ProtoBufC
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-#
+#  RIACK_FOUND - system has riack
+#  RIACK_INCLUDE_DIR - the riack include directory
+#  RIACK_LIBRARIES - Link these to use riack
+#  RIACK_DEFINITIONS - Compiler switches required for using riack
 
-
-if ( PROTOBUFC_INCLUDE_DIR )
+if ( RIACK_INCLUDE_DIR AND RIACK_LIBRARIES )
    # in cache already
    SET(riack_FIND_QUIETLY TRUE)
-endif ( PROTOBUFC_INCLUDE_DIR )
+endif ( RIACK_INCLUDE_DIR AND RIACK_LIBRARIES )
 
 if ( WIN32 )
-   SET (PROTOBUFC_INCLUDE_DIRS C:/Development/precompiled-riack/include)
+   SET (RIACK_INCLUDE_DIRS C:/Development/precompiled-riack)
+   SET (RIACK_LIBRARY_DIRS C:/Development/precompiled-riack)
 endif ( WIN32 )
 
 # use pkg-config to get the directories and then use these values
@@ -35,9 +32,15 @@ FIND_PATH(RIACK_INCLUDE_DIR
   ${RIACK_INCLUDE_DIRS}
 )
 
+FIND_LIBRARY(RIACK_LIBRARIES 
+  NAMES riack
+  PATHS
+  ${RIACK_LIBRARY_DIRS}
+)
+
 include(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(riack DEFAULT_MSG RIACK_INCLUDE_DIR )
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(riack DEFAULT_MSG RIACK_INCLUDE_DIR RIACK_LIBRARIES )
 
 # show the RIACK_INCLUDE_DIR variables only in the advanced view
-MARK_AS_ADVANCED(PROTOBUFC_INCLUDE_DIR )
+MARK_AS_ADVANCED(RIACK_INCLUDE_DIR RIACK_LIBRARIES )
 

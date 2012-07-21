@@ -8,13 +8,24 @@
 #ifndef CLIENT_H_
 #define CLIENT_H_
 
-namespace Riack {
+#include <string>
+extern "C" {
+#include <riack.h>
+}
+
+namespace Riak {
 
 class Client {
 public:
-	Client();
+	Client(const std::string& host, int port);
 	virtual ~Client();
+private:
+	std::string host;
+	int port;
+	bool connected;
+
+	struct RIACK_CLIENT *client;
 };
 
-} /* namespace Riack */
+} /* namespace Riak */
 #endif /* CLIENT_H_ */
