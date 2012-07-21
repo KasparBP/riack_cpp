@@ -5,13 +5,11 @@
  *      Author: kaspar
  */
 
-#ifndef CLIENT_H_
-#define CLIENT_H_
+#ifndef RIACKCPP_CLIENT_H__
+#define RIACKCPP_CLIENT_H__
 
 #include <string>
-extern "C" {
-#include <riack.h>
-}
+#include "RiackCpp.h"
 
 namespace Riak {
 
@@ -19,7 +17,10 @@ class Client {
 public:
 	Client(const std::string& host, int port);
 	virtual ~Client();
+
 private:
+	bool connect();
+
 	std::string host;
 	int port;
 	bool connected;
@@ -28,4 +29,5 @@ private:
 };
 
 } /* namespace Riak */
-#endif /* CLIENT_H_ */
+
+#endif /* RIACKCPP_CLIENT_H__ */

@@ -12,7 +12,9 @@ find_package(riack REQUIRED)
 include_directories(${RIACK_INCLUDE_DIRS})
 set(LIBS ${LIBS} ${RIACK_LIBRARIES})
 
-SET(RIACKCPP_SRC	Client.cpp)
+SET(RIACKCPP_SRC	Client.cpp
+					Bucket.cpp
+					Object.cpp)
 
 # SET(TESTS_MAIN_SRC	)
 

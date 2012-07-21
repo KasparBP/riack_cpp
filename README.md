@@ -1,4 +1,4 @@
 riack_cpp
 =========
 
-riack c++ wrapper
+riack c++ 
