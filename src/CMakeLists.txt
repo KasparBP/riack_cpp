@@ -25,15 +25,15 @@ IF (BUILD_SHARED_LIBS)
   SET (LIB_TYPE SHARED)
 ENDIF (BUILD_SHARED_LIBS)
 
-add_library (riack_cpp ${LIB_TYPE} ${RIACKCPP_SRC})
-target_link_libraries(riack_cpp ${LIBS})
+add_library (riack++ ${LIB_TYPE} ${RIACKCPP_SRC})
+target_link_libraries(riack++ ${LIBS})
 
-INSTALL(TARGETS riack_cpp
+INSTALL(TARGETS riack++
         DESTINATION lib
         PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
         
-INSTALL(FILES riack_cpp/client.h
-        DESTINATION include
+INSTALL(FILES Client.h Bucket.h Object.h String.h Content.h
+        DESTINATION include/riack++
         PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
 
 # add_executable(tests ${TESTS_MAIN_SRC})
@@ -41,5 +41,5 @@ INSTALL(FILES riack_cpp/client.h
 
 IF (WIN32)
 ELSE()
-   SET_TARGET_PROPERTIES(riack_cpp PROPERTIES COMPILE_FLAGS "-fPIC")
+   SET_TARGET_PROPERTIES(riack++ PROPERTIES COMPILE_FLAGS "-fPIC")
 ENDIF (WIN32)
