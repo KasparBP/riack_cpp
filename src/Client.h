@@ -27,8 +27,8 @@ public:
 	Client(const std::string& host, int port);
 	virtual ~Client();
 
-private:
 	bool connect();
+private:
 
 	std::string host;
 	int port;

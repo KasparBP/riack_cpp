@@ -11,9 +11,8 @@ namespace Riak {
 
 std::string ConnectionTest::name = "connection";
 
-ConnectionTest::ConnectionTest(const std::vector<std::string> &arguments) : RiakTestCase(arguments) {
-
-}
+ConnectionTest::ConnectionTest(const std::vector<std::string> &arguments) : RiakTestCase(arguments)
+{}
 
 ConnectionTest::~ConnectionTest() {
 
@@ -21,6 +20,10 @@ ConnectionTest::~ConnectionTest() {
 
 int ConnectionTest::runTest()
 {
+	if (!getClient().connect()) {
+		return -2;
+	}
+
 	return 0;
 }
 

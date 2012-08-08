@@ -5,6 +5,7 @@
 #include "TestCase.h"
 #include "../RiackCpp.h"
 #include "../Client.h"
+#include <memory>
 
 namespace Riak {
 
@@ -13,7 +14,10 @@ public:
 	RiakTestCase(const std::vector<std::string> &arguments);
 	virtual ~RiakTestCase();
 protected:
+
+	Client& getClient();
 private:
+	std::auto_ptr<Client> client;
 };
 
 } /* namespace Riak */

@@ -26,21 +26,19 @@ TestHandler::TestHandler() {
 TestHandler::~TestHandler() {
 }
 
-TestCase* TestHandler::testFactory(const std::string &name, const std::vector<std::string> &arguments)
+std::auto_ptr<Riak::TestCase> TestHandler::testFactory(const std::string &name, const std::vector<std::string> &arguments)
 {
 	if (name.compare(ConnectionTest::name) == 0) {
-		return new ConnectionTest(arguments);
+		return std::auto_ptr<TestCase>(new ConnectionTest(arguments));
 	}
-	return 0;
+	return std::auto_ptr<TestCase>();
 }
 
 int TestHandler::runTest(const std::vector<std::string> &arguments)
 {
-	int result = -1;
-	TestCase* testCase = testFactory(arguments[0], arguments);
-	if (testCase) {
-		result = testCase->runTest();
-		delete testCase;
+	std::auto_ptr<TestCase> testCase = testFactory(arguments[0], arguments);
+	if (testCase.get()) {
+		return testCase->runTest();
 	}
-	return result;
+	return -1;
 }
