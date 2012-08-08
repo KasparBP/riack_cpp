@@ -19,7 +19,12 @@ SET(RIACKCPP_SRC	Client.cpp
 					Content.cpp)
 
 SET(TEST_SRC        tests/TestHandler.cpp
-                    tests/TestHandler.h)
+                    tests/TestHandler.h
+                    tests/ConnectionTest.cpp
+                    tests/ConnectionTest.h
+                    tests/RiakTestCase.cpp
+                    tests/RiakTestCase.h
+                    tests/TestCase.h)
 
 
 SET (LIB_TYPE STATIC)

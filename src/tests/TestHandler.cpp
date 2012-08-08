@@ -1,12 +1,9 @@
-/*
- * TestHandler.cpp
- *
- *  Created on: Aug 7, 2012
- *      Author: kpn
- */
 
 #include "TestHandler.h"
+#include "ConnectionTest.h"
 #include <iostream>
+
+using namespace Riak;
 
 int main(int argc, char* argv[])
 {
@@ -23,14 +20,27 @@ int main(int argc, char* argv[])
 	return handler.runTest(arguments);
 }
 
-
 TestHandler::TestHandler() {
 }
 
 TestHandler::~TestHandler() {
 }
 
-int TestHandler::runTest(const std::vector<std::string> arguments)
+TestCase* TestHandler::testFactory(const std::string &name, const std::vector<std::string> &arguments)
 {
+	if (name.compare(ConnectionTest::name) == 0) {
+		return new ConnectionTest(arguments);
+	}
 	return 0;
+}
+
+int TestHandler::runTest(const std::vector<std::string> &arguments)
+{
+	int result = -1;
+	TestCase* testCase = testFactory(arguments[0], arguments);
+	if (testCase) {
+		result = testCase->runTest();
+		delete testCase;
+	}
+	return result;
 }
