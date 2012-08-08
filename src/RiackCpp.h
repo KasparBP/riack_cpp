@@ -22,7 +22,7 @@ extern "C" {
 #include <riack.h>
 }
 
-class Riak {
+class RiakCpp {
 public:
 	static void init() {
 		riack_init();

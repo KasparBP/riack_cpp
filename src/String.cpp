@@ -16,6 +16,7 @@
 */
 
 #include "String.h"
+#include <string.h>
 
 namespace Riak {
 

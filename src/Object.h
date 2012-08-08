@@ -35,11 +35,13 @@ public:
 	bool store();
 
 	void setContentType(const String& contentType);
+	void setContentEncoding(const String& contentEncoding);
 private:
 	void reset();
 	Bucket *bucket;
 	String key;
 	String contentType;
+	String contentEncoding;
 
 	size_t valueLength;
 	uint8_t *value;

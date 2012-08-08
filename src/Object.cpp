@@ -17,6 +17,7 @@
 
 #include "Object.h"
 #include "Bucket.h"
+#include <string.h>
 
 namespace Riak {
 
@@ -32,6 +33,10 @@ Object::~Object() {
 
 void Object::setContentType(const String& contentType) {
 	this->contentType = contentType;
+}
+
+void Object::setContentEncoding(const String& contentEncoding) {
+	this->contentEncoding = contentEncoding;
 }
 
 void Object::reset() {
@@ -53,6 +58,10 @@ bool Object::store() {
 	struct RIACK_OBJECT obj;
 	struct RIACK_CONTENT content;
 	content.content_type = contentType.getAsRiackString();
+	content.content_encoding = contentEncoding.getAsRiackString();
+	content.data = this->value;
+	content.data_len = this->valueLength;
+
 	obj.bucket = bucket->getName().getAsRiackString();
 	obj.key = key.getAsRiackString();
 	obj.content_count = 1;

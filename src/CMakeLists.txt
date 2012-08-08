@@ -18,7 +18,9 @@ SET(RIACKCPP_SRC	Client.cpp
 					String.cpp
 					Content.cpp)
 
-# SET(TESTS_MAIN_SRC	)
+SET(TEST_SRC        tests/TestHandler.cpp
+                    tests/TestHandler.h)
+
 
 SET (LIB_TYPE STATIC)
 IF (BUILD_SHARED_LIBS)
@@ -36,8 +38,9 @@ INSTALL(FILES Client.h Bucket.h Object.h String.h Content.h
         DESTINATION include/riack++
         PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
 
-# add_executable(tests ${TESTS_MAIN_SRC})
-# target_link_libraries(tests ${LIBS} riack)
+
+add_executable(tests ${TEST_SRC})
+target_link_libraries(tests ${LIBS} riack++)
 
 IF (WIN32)
 ELSE()
