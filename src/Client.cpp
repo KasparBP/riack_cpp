@@ -30,13 +30,25 @@ Client::~Client() {
 	riack_free(client);
 }
 
-bool Client::connect() {
+bool Client::isConnected()
+{
+	return connected;
+}
+
+bool Client::connect()
+{
+	int status = connected ?
+			riack_reconnect(client) :
+			riack_connect(client, host.c_str(), port, 0);
+
+	connected = (status == RIACK_SUCCESS);
+	return connected;
+}
+
+bool Client::ping()
+{
 	if (connected) {
-		if (riack_reconnect(client) == RIACK_SUCCESS) {
-			return true;
-		}
-	} else {
-		if (riack_connect(client, host.c_str(), port, 0)) {
+		if (riack_ping(client) == RIACK_SUCCESS) {
 			return true;
 		}
 	}

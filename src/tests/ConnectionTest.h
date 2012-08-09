@@ -1,9 +1,3 @@
-/*
- * ConnectionTest.h
- *
- *  Created on: Aug 8, 2012
- *      Author: kpn
- */
 
 #ifndef CONNECTIONTEST_H_
 #define CONNECTIONTEST_H_

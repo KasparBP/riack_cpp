@@ -4,6 +4,7 @@
 
 #include "TestCase.h"
 #include "../RiackCpp.h"
+#include "../String.h"
 #include "../Client.h"
 #include <memory>
 
@@ -13,6 +14,8 @@ class RiakTestCase : public TestCase {
 public:
 	RiakTestCase(const std::vector<std::string> &arguments);
 	virtual ~RiakTestCase();
+
+	const String getTestBucketName() const;
 protected:
 
 	Client& getClient();

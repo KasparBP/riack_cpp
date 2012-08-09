@@ -27,7 +27,10 @@ public:
 	Client(const std::string& host, int port);
 	virtual ~Client();
 
+	bool isConnected();
+
 	bool connect();
+	bool ping();
 private:
 
 	std::string host;

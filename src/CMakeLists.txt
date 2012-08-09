@@ -25,6 +25,8 @@ SET(TEST_SRC        tests/TestHandler.cpp
                     tests/TestHandler.h
                     tests/ConnectionTest.cpp
                     tests/ConnectionTest.h
+                    tests/GetPutTest.cpp
+                    tests/GetPutTest.h
                     tests/RiakTestCase.cpp
                     tests/RiakTestCase.h
                     tests/TestCase.h)
@@ -56,4 +58,5 @@ ELSE()
 ENDIF (WIN32)
 
 ADD_TEST(test-connect   ${CMAKE_CURRENT_BINARY_DIR}/tests ${RIAK_TEST_SERVER_IP} ${RIAK_TEST_SERVER_PB_PORT} connection)
+ADD_TEST(test-getput   ${CMAKE_CURRENT_BINARY_DIR}/tests ${RIAK_TEST_SERVER_IP} ${RIAK_TEST_SERVER_PB_PORT} getput)
 

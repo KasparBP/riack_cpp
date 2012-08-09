@@ -4,6 +4,8 @@
 
 namespace Riak {
 
+#define TEST_BUCKET_NAME "TEST_BUCKET"
+
 RiakTestCase::RiakTestCase(const std::vector<std::string> &arguments)
 	: TestCase(arguments)
 {
@@ -23,7 +25,13 @@ RiakTestCase::~RiakTestCase()
 	RiakCpp::cleanup();
 }
 
-Client& RiakTestCase::getClient() {
+const String RiakTestCase::getTestBucketName() const
+{
+	return String(TEST_BUCKET_NAME);
+}
+
+Client& RiakTestCase::getClient()
+{
 	return *client;
 }
 

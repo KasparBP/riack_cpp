@@ -1,6 +1,7 @@
 
 #include "TestHandler.h"
 #include "ConnectionTest.h"
+#include "GetPutTest.h"
 #include <iostream>
 
 using namespace Riak;
@@ -20,16 +21,20 @@ int main(int argc, char* argv[])
 	return handler.runTest(arguments);
 }
 
-TestHandler::TestHandler() {
+TestHandler::TestHandler()
+{
 }
 
-TestHandler::~TestHandler() {
+TestHandler::~TestHandler()
+{
 }
 
 std::auto_ptr<Riak::TestCase> TestHandler::testFactory(const std::string &name, const std::vector<std::string> &arguments)
 {
 	if (name.compare(ConnectionTest::name) == 0) {
 		return std::auto_ptr<TestCase>(new ConnectionTest(arguments));
+	} else if (name.compare(GetPutTest::name) == 0) {
+		return std::auto_ptr<TestCase>(new GetPutTest(arguments));
 	}
 	return std::auto_ptr<TestCase>();
 }

@@ -1,9 +1,3 @@
-/*
- * ConnectionTest.cpp
- *
- *  Created on: Aug 8, 2012
- *      Author: kpn
- */
 
 #include "ConnectionTest.h"
 
@@ -22,6 +16,9 @@ int ConnectionTest::runTest()
 {
 	if (!getClient().connect()) {
 		return -2;
+	}
+	if (!getClient().ping()) {
+		return -3;
 	}
 
 	return 0;
