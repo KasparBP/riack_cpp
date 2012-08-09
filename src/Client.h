@@ -31,6 +31,8 @@ public:
 
 	bool connect();
 	bool ping();
+
+	struct RIACK_CLIENT *getRiackClient();
 private:
 
 	std::string host;

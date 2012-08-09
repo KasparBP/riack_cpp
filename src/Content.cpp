@@ -19,13 +19,12 @@
 
 namespace Riak {
 
-Content::Content() {
-	// TODO Auto-generated constructor stub
-
+Content::Content()
+{
 }
 
-Content::~Content() {
-	// TODO Auto-generated destructor stub
+Content::~Content()
+{
 }
 
 } /* namespace Riak */

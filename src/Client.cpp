@@ -28,6 +28,11 @@ Client::Client(const std::string& host, int port) {
 
 Client::~Client() {
 	riack_free(client);
+
+}
+struct RIACK_CLIENT *Client::getRiackClient()
+{
+	return client;
 }
 
 bool Client::isConnected()

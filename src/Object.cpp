@@ -17,6 +17,7 @@
 
 #include "Object.h"
 #include "Bucket.h"
+#include "Client.h"
 #include <string.h>
 
 namespace Riak {
@@ -60,8 +61,12 @@ bool Object::fetch() {
 }
 
 bool Object::store() {
-	struct RIACK_OBJECT obj;
+	struct RIACK_CLIENT* riackClient;
+	struct RIACK_OBJECT obj, returnedObj;
 	struct RIACK_CONTENT content;
+	memset(&obj, 0, sizeof(obj));
+	memset(&returnedObj, 0, sizeof(returnedObj));
+	memset(&content, 0, sizeof(content));
 	content.content_type = contentType.getAsRiackString();
 	content.content_encoding = contentEncoding.getAsRiackString();
 	content.data = this->value;
@@ -70,8 +75,15 @@ bool Object::store() {
 	obj.bucket = bucket->getName().getAsRiackString();
 	obj.key = key.getAsRiackString();
 	obj.content_count = 1;
+	obj.content = &content;
+	riackClient = bucket->getClient()->getRiackClient();
+	if (riack_put(riackClient, obj, &returnedObj, 0) == RIACK_SUCCESS) {
+		// TODO read back value from returnedObj
+		riack_free_object(riackClient, &returnedObj);
+		return true;
+	}
 
-	return true;
+	return false;
 }
 
 } /* namespace Riak */

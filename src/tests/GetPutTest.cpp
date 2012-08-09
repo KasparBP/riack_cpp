@@ -31,8 +31,10 @@ int GetPutTest::runTest()
 {
 	Object obj(bucket.get(), "test_key_1__");
 	obj.setContentType("application/json");
-
-	return 0;
+	if (obj.store()) {
+		return 0;
+	}
+	return 1;
 }
 
 } /* namespace Riak */
