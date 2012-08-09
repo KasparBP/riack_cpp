@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 	TestHandler handler;
-	for (int i=2; i<argc; ++i) {
+	for (int i=1; i<argc; ++i) {
 		arguments.push_back(argv[i]);
 	}
 
@@ -36,7 +36,7 @@ std::auto_ptr<Riak::TestCase> TestHandler::testFactory(const std::string &name, 
 
 int TestHandler::runTest(const std::vector<std::string> &arguments)
 {
-	std::auto_ptr<TestCase> testCase = testFactory(arguments[0], arguments);
+	std::auto_ptr<TestCase> testCase = testFactory(arguments[2], arguments);
 	if (testCase.get()) {
 		return testCase->runTest();
 	}

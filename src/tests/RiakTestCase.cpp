@@ -8,11 +8,11 @@ RiakTestCase::RiakTestCase(const std::vector<std::string> &arguments)
 	: TestCase(arguments)
 {
 	int port;
-	std::string ip = arguments[1];
+	std::string ip = arguments[0];
 
 	RiakCpp::init();
 
-	sscanf(arguments[2].c_str(), "%d", &port);
+	sscanf(arguments[1].c_str(), "%d", &port);
 	client = std::auto_ptr<Client>(new Client(ip, port));
 }
 
