@@ -41,9 +41,12 @@ std::auto_ptr<Riak::TestCase> TestHandler::testFactory(const std::string &name, 
 
 int TestHandler::runTest(const std::vector<std::string> &arguments)
 {
+	int result = -1;
 	std::auto_ptr<TestCase> testCase = testFactory(arguments[2], arguments);
 	if (testCase.get()) {
-		return testCase->runTest();
+		testCase->setup();
+		result = testCase->runTest();
+		testCase->tearDown();
 	}
-	return -1;
+	return result;
 }

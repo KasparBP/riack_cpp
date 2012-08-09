@@ -1,5 +1,6 @@
 
 #include "GetPutTest.h"
+#include "../Object.h"
 
 namespace Riak {
 
@@ -28,6 +29,9 @@ void GetPutTest::tearDown()
 
 int GetPutTest::runTest()
 {
+	Object obj(bucket.get(), "test_key_1__");
+	obj.setContentType("application/json");
+
 	return 0;
 }
 

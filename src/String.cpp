@@ -17,29 +17,59 @@
 
 #include "String.h"
 #include <string.h>
+#include <algorithm>
 
 namespace Riak {
 
-String::String() {
-	riackString.len = 0;
-	riackString.value = 0;
+void swap(String& first, String& second)
+{
+	std::swap(first.riackString, second.riackString);
 }
 
-String::String(const std::string& str) {
-	setValue(str);
+String::String()
+{
+	initWith(0,0);
 }
 
-String::String(const String& str) {
-	riackString.len = str.riackString.len;
-	riackString.value = new char [str.riackString.len];
-	memcpy(riackString.value, str.riackString.value, str.riackString.len);
+String::String(const std::string& str)
+{
+	initWith(str.c_str(), str.length());
 }
 
-String::~String() {
+String::String(const String& str)
+{
+	initWith(str.riackString.value, str.riackString.len);
+}
+
+String::String(const char* str)
+{
+	initWith(str, strlen(str));
+}
+
+String::~String()
+{
 	reset();
 }
 
-void String::reset() {
+String& String::operator=(String other)
+{
+	swap(*this, other);
+	return *this;
+}
+
+void String::initWith(const char* data, size_t dataLen)
+{
+	riackString.len = dataLen;
+	if (dataLen > 0) {
+		riackString.value = new char [dataLen];
+		memcpy(riackString.value, data, dataLen);
+	} else {
+		riackString.value = 0;
+	}
+}
+
+void String::reset()
+{
 	if (riackString.value != 0 && riackString.len > 0) {
 		delete [] riackString.value;
 	}
@@ -47,16 +77,14 @@ void String::reset() {
 	riackString.len = 0;
 }
 
-void String::setValue(const std::string& value) {
+void String::setValue(const std::string& value)
+{
 	reset();
-	if (value.length() > 0) {
-		riackString.len = value.length();
-		riackString.value = new char[value.length()];
-		memcpy(riackString.value, value.c_str(), value.length());
-	}
+	initWith(value.c_str(), value.length());
 }
 
-const RIACK_STRING& String::getAsRiackString() const {
+const RIACK_STRING& String::getAsRiackString() const
+{
 	return riackString;
 }
 

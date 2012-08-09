@@ -24,15 +24,20 @@
 namespace Riak {
 
 class String {
+	friend void swap(String& first, String& second);
 public:
 	String();
 	String(const std::string& str);
 	String(const String& str);
+	String(const char* str);
 	virtual ~String();
+
+	String& operator=(String other);
 
 	void setValue(const std::string& value);
 	const RIACK_STRING& getAsRiackString() const;
 private:
+	void initWith(const char* data, size_t dataLen);
 	void reset();
 	RIACK_STRING riackString;
 };

@@ -31,6 +31,8 @@ public:
 	Object(Bucket *bucket, const String& key);
 	virtual ~Object();
 
+	bool fetch();
+
 	void setValue(uint8_t *value, size_t valueLength);
 	bool store();
 

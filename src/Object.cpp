@@ -24,7 +24,8 @@ namespace Riak {
 Object::Object(Bucket *bucket, const String& key) {
 	this->bucket = bucket;
 	this->key = key;
-	reset();
+	this->value = 0;
+	this->valueLength = 0;
 }
 
 Object::~Object() {
@@ -52,6 +53,10 @@ void Object::setValue(uint8_t *value, size_t valueLength) {
 	this->valueLength = valueLength;
 	this->value = new uint8_t[valueLength];
 	memcpy(this->value, value, valueLength);
+}
+
+bool Object::fetch() {
+	return false;
 }
 
 bool Object::store() {
