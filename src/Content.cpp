@@ -16,15 +16,69 @@
 */
 
 #include "Content.h"
+#include <string.h>
 
 namespace Riak {
 
-Content::Content()
-{
+Content::Content() {
+	this->value = 0;
+	this->valueLength = 0;
 }
 
-Content::~Content()
-{
+Content::~Content() {
+}
+
+
+void Content::setContentType(const String& contentType) {
+	this->contentType = contentType;
+}
+
+void Content::setContentEncoding(const String& contentEncoding) {
+	this->contentEncoding = contentEncoding;
+}
+
+void Content::reset() {
+	if (value != 0 && valueLength > 0) {
+		delete [] value;
+	}
+	value = 0;
+	valueLength = 0;
+}
+
+void Content::setValue(uint8_t *value, size_t valueLength) {
+	reset();
+	this->valueLength = valueLength;
+	this->value = new uint8_t[valueLength];
+	memcpy(this->value, value, valueLength);
+}
+
+void Content::setFromRiackContent(const struct RIACK_CONTENT& content, bool hasData) {
+	contentEncoding = content.content_encoding;
+	contentType = content.content_type;
+	vtag = content.vtag;
+	if (hasData) {
+		setValue(content.data, content.data_len);
+	}
+}
+
+String Content::getContentType() {
+	return contentType;
+}
+
+String Content::getContentEncoding() {
+	return contentEncoding;
+}
+
+String Content::getVtag() {
+	return vtag;
+}
+
+uint8_t* Content::getValue() {
+	return value;
+}
+
+size_t Content::getValueLength() {
+	return valueLength;
 }
 
 } /* namespace Riak */

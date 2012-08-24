@@ -21,16 +21,13 @@ int main(int argc, char* argv[])
 	return handler.runTest(arguments);
 }
 
-TestHandler::TestHandler()
-{
+TestHandler::TestHandler() {
 }
 
-TestHandler::~TestHandler()
-{
+TestHandler::~TestHandler() {
 }
 
-std::auto_ptr<Riak::TestCase> TestHandler::testFactory(const std::string &name, const std::vector<std::string> &arguments)
-{
+std::auto_ptr<Riak::TestCase> TestHandler::testFactory(const std::string &name, const std::vector<std::string> &arguments) {
 	if (name.compare(ConnectionTest::name) == 0) {
 		return std::auto_ptr<TestCase>(new ConnectionTest(arguments));
 	} else if (name.compare(GetPutTest::name) == 0) {
@@ -39,8 +36,7 @@ std::auto_ptr<Riak::TestCase> TestHandler::testFactory(const std::string &name, 
 	return std::auto_ptr<TestCase>();
 }
 
-int TestHandler::runTest(const std::vector<std::string> &arguments)
-{
+int TestHandler::runTest(const std::vector<std::string> &arguments) {
 	int result = -1;
 	std::auto_ptr<TestCase> testCase = testFactory(arguments[2], arguments);
 	if (testCase.get()) {

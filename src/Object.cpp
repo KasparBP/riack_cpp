@@ -25,35 +25,23 @@ namespace Riak {
 Object::Object(Bucket *bucket, const String& key) {
 	this->bucket = bucket;
 	this->key = key;
-	this->value = 0;
-	this->valueLength = 0;
+	this->state = Ok;
+
+	this->contents.push_back(Content());
 }
 
 Object::~Object() {
-	reset();
 }
 
-void Object::setContentType(const String& contentType) {
-	this->contentType = contentType;
+ObjectState Object::getState() {
+	return state;
 }
 
-void Object::setContentEncoding(const String& contentEncoding) {
-	this->contentEncoding = contentEncoding;
-}
-
-void Object::reset() {
-	if (value != 0 && valueLength > 0) {
-		delete [] value;
+Content* Object::getContent(size_t index) {
+	if (index < 0 || index >= contents.size()) {
+		return NULL;
 	}
-	value = 0;
-	valueLength = 0;
-}
-
-void Object::setValue(uint8_t *value, size_t valueLength) {
-	reset();
-	this->valueLength = valueLength;
-	this->value = new uint8_t[valueLength];
-	memcpy(this->value, value, valueLength);
+	return &contents[index];
 }
 
 bool Object::fetch() {
@@ -64,25 +52,37 @@ bool Object::store() {
 	struct RIACK_CLIENT* riackClient;
 	struct RIACK_OBJECT obj, returnedObj;
 	struct RIACK_CONTENT content;
+	struct RIACK_PUT_PROPERTIES props;
+
+	if (getState() != Ok || contents.size() != 1) {
+		return false;
+	}
+
 	memset(&obj, 0, sizeof(obj));
 	memset(&returnedObj, 0, sizeof(returnedObj));
 	memset(&content, 0, sizeof(content));
-	content.content_type = contentType.getAsRiackString();
-	content.content_encoding = contentEncoding.getAsRiackString();
-	content.data = this->value;
-	content.data_len = this->valueLength;
+	memset(&props, 0, sizeof(props));
+	props.return_head_use = 1;
+	props.return_head = 1;
+	content.content_type = contents[0].getContentType().getAsRiackString();
+	content.content_encoding = contents[0].getContentEncoding().getAsRiackString();
+	content.data = contents[0].getValue();
+	content.data_len = contents[0].getValueLength();
 
 	obj.bucket = bucket->getName().getAsRiackString();
 	obj.key = key.getAsRiackString();
 	obj.content_count = 1;
 	obj.content = &content;
 	riackClient = bucket->getClient()->getRiackClient();
-	if (riack_put(riackClient, obj, &returnedObj, 0) == RIACK_SUCCESS) {
-		// TODO read back value from returnedObj
+	if (riack_put(riackClient, obj, &returnedObj, &props) == RIACK_SUCCESS) {
+		if (returnedObj.content_count == 1) {
+			contents[0].setFromRiackContent(returnedObj.content[0], (props.return_body_use && props.return_body));
+		} else {
+			// TODO conflifted
+		}
 		riack_free_object(riackClient, &returnedObj);
 		return true;
 	}
-
 	return false;
 }
 

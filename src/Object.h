@@ -18,6 +18,7 @@
 #ifndef RIACKCPP_OBJECT_H_
 #define RIACKCPP_OBJECT_H_
 
+#include <vector>
 #include "RiackCpp.h"
 #include "String.h"
 #include "Content.h"
@@ -26,27 +27,28 @@ namespace Riak {
 
 class Bucket;
 
+typedef enum {
+	Ok,
+	Conflicted
+} ObjectState;
+
 class Object {
 public:
 	Object(Bucket *bucket, const String& key);
 	virtual ~Object();
 
-	bool fetch();
+	ObjectState getState();
 
-	void setValue(uint8_t *value, size_t valueLength);
+	bool fetch();
 	bool store();
 
-	void setContentType(const String& contentType);
-	void setContentEncoding(const String& contentEncoding);
+	Content* getContent(size_t index);
 private:
-	void reset();
+	ObjectState state;
+
 	Bucket *bucket;
 	String key;
-	String contentType;
-	String contentEncoding;
-
-	size_t valueLength;
-	uint8_t *value;
+	std::vector<Content> contents;
 };
 
 } /* namespace Riak */

@@ -7,30 +7,25 @@ namespace Riak {
 std::string GetPutTest::name = "getput";
 
 GetPutTest::GetPutTest(const std::vector<std::string> &arguments)
-	: RiakTestCase(arguments)
-{
+	: RiakTestCase(arguments) {
 
 }
 
-GetPutTest::~GetPutTest()
-{
+GetPutTest::~GetPutTest() {
 }
 
-void GetPutTest::setup()
-{
+void GetPutTest::setup() {
 	getClient().connect();
 	bucket = std::auto_ptr<Bucket>(new Bucket(&getClient(), getTestBucketName()));
 }
 
-void GetPutTest::tearDown()
-{
+void GetPutTest::tearDown() {
 	bucket.reset(0);
 }
 
-int GetPutTest::runTest()
-{
+int GetPutTest::runTest() {
 	Object obj(bucket.get(), "test_key_1__");
-	obj.setContentType("application/json");
+	obj.getContent(0)->setContentType("application/json");
 	if (obj.store()) {
 		return 0;
 	}

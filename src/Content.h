@@ -18,12 +18,39 @@
 #ifndef CONTENT_H_
 #define CONTENT_H_
 
+
+#include "RiackCpp.h"
+#include "String.h"
+
 namespace Riak {
 
 class Content {
 public:
 	Content();
 	virtual ~Content();
+
+	void setContentType(const String& contentType);
+	void setContentEncoding(const String& contentEncoding);
+
+	void setValue(uint8_t *value, size_t valueLength);
+
+	void setFromRiackContent(const struct RIACK_CONTENT& content, bool hasData);
+
+	String getContentType();
+	String getContentEncoding();
+	String getVtag();
+
+	uint8_t* getValue();
+	size_t getValueLength();
+private:
+	void reset();
+
+	String contentType;
+	String contentEncoding;
+	String vtag;
+
+	size_t valueLength;
+	uint8_t *value;
 };
 
 } /* namespace Riak */

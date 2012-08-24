@@ -46,6 +46,10 @@ String::String(const char* str)
 	initWith(str, strlen(str));
 }
 
+String::String(const RIACK_STRING& str) {
+	initWith(str.value, str.len);
+}
+
 String::~String()
 {
 	reset();

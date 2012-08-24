@@ -29,6 +29,7 @@ public:
 	String();
 	String(const std::string& str);
 	String(const String& str);
+	String(const RIACK_STRING& str);
 	String(const char* str);
 	virtual ~String();
 
