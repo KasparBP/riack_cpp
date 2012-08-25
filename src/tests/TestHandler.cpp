@@ -2,6 +2,7 @@
 #include "TestHandler.h"
 #include "ConnectionTest.h"
 #include "GetPutTest.h"
+#include "ConflictedStateTest.h"
 #include <iostream>
 
 using namespace Riak;
@@ -32,6 +33,8 @@ std::auto_ptr<Riak::TestCase> TestHandler::testFactory(const std::string &name, 
 		return std::auto_ptr<TestCase>(new ConnectionTest(arguments));
 	} else if (name.compare(GetPutTest::name) == 0) {
 		return std::auto_ptr<TestCase>(new GetPutTest(arguments));
+	} else if (name.compare(ConflictedStateTest::name) == 0) {
+		return std::auto_ptr<TestCase>(new ConflictedStateTest(arguments));
 	}
 	return std::auto_ptr<TestCase>();
 }

@@ -20,14 +20,42 @@
 
 namespace Riak {
 
+void swap(Content& first, Content& second) throw()
+{
+	std::swap(first.value, first.value);
+	std::swap(first.valueLength, first.valueLength);
+	std::swap(first.contentEncoding, first.contentEncoding);
+	std::swap(first.contentType, first.contentType);
+	std::swap(first.vtag, first.vtag);
+}
+
 Content::Content() {
 	this->value = 0;
 	this->valueLength = 0;
 }
 
+Content::Content(const struct RIACK_CONTENT& content) {
+	this->value = 0;
+	this->valueLength = 0;
+	setFromRiackContent(content, true);
+}
+
+Content::Content(const Content& content) {
+	this->value = 0;
+	this->valueLength = 0;
+	contentEncoding = content.contentEncoding;
+	contentType = content.contentType;
+	vtag = content.vtag;
+	setValue(content.value, content.valueLength);
+}
+
 Content::~Content() {
 }
 
+Content& Content::operator=(Content other) {
+	std::swap(*this, other);
+	return *this;
+}
 
 void Content::setContentType(const String& contentType) {
 	this->contentType = contentType;

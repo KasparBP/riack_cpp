@@ -45,7 +45,32 @@ Content* Object::getContent(size_t index) {
 }
 
 bool Object::fetch() {
-	return false;
+	size_t contentCount;
+	struct RIACK_CLIENT* riackClient;
+	struct RIACK_GET_PROPERTIES props;
+	struct RIACK_GET_OBJECT getResult;
+	bool result = false;
+
+	memset(&props, 0, sizeof(props));
+	memset(&getResult, 0, sizeof(getResult));
+
+	riackClient = bucket->getClient()->getRiackClient();
+	if (riack_get(riackClient, bucket->getName().getAsRiackString(),
+			key.getAsRiackString(), &props, &getResult) == RIACK_SUCCESS) {
+		contentCount = getResult.object.content_count;
+		if (contentCount > 0) {
+			contents.empty();
+			for (size_t i=0; i<contentCount; ++i) {
+				contents.push_back(Content(getResult.object.content[i]));
+			}
+			if (contentCount > 1) {
+				state = Conflicted;
+			}
+			result = true;
+		}
+		riack_free_get_object(riackClient, &getResult);
+	}
+	return result;
 }
 
 bool Object::store() {
@@ -78,7 +103,7 @@ bool Object::store() {
 		if (returnedObj.content_count == 1) {
 			contents[0].setFromRiackContent(returnedObj.content[0], (props.return_body_use && props.return_body));
 		} else {
-			// TODO conflifted
+			// TODO conflicted
 		}
 		riack_free_object(riackClient, &returnedObj);
 		return true;

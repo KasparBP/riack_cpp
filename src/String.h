@@ -24,7 +24,7 @@
 namespace Riak {
 
 class String {
-	friend void swap(String& first, String& second);
+	friend void swap(String& first, String& second) throw();
 public:
 	String();
 	String(const std::string& str);

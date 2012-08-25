@@ -27,6 +27,8 @@ SET(TEST_SRC        tests/TestHandler.cpp
                     tests/ConnectionTest.h
                     tests/GetPutTest.cpp
                     tests/GetPutTest.h
+                    tests/ConflictedStateTest.cpp
+                    tests/ConflictedStateTest.h
                     tests/RiakTestCase.cpp
                     tests/RiakTestCase.h
                     tests/TestCase.h)
@@ -57,6 +59,6 @@ ELSE()
    SET_TARGET_PROPERTIES(riack++ PROPERTIES COMPILE_FLAGS "-fPIC")
 ENDIF (WIN32)
 
-ADD_TEST(test-connect   ${CMAKE_CURRENT_BINARY_DIR}/tests ${RIAK_TEST_SERVER_IP} ${RIAK_TEST_SERVER_PB_PORT} connection)
-ADD_TEST(test-getput   ${CMAKE_CURRENT_BINARY_DIR}/tests ${RIAK_TEST_SERVER_IP} ${RIAK_TEST_SERVER_PB_PORT} getput)
-
+ADD_TEST(test-connect    ${CMAKE_CURRENT_BINARY_DIR}/tests ${RIAK_TEST_SERVER_IP} ${RIAK_TEST_SERVER_PB_PORT} connection)
+ADD_TEST(test-getput     ${CMAKE_CURRENT_BINARY_DIR}/tests ${RIAK_TEST_SERVER_IP} ${RIAK_TEST_SERVER_PB_PORT} getput)
+ADD_TEST(test-conflicted ${CMAKE_CURRENT_BINARY_DIR}/tests ${RIAK_TEST_SERVER_IP} ${RIAK_TEST_SERVER_PB_PORT} conflicted)

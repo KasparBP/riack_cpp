@@ -25,9 +25,14 @@
 namespace Riak {
 
 class Content {
+	friend void swap(Content& first, Content& second) throw();
 public:
 	Content();
+	Content(const struct RIACK_CONTENT& content);
+	Content(const Content& content);
 	virtual ~Content();
+
+	Content& operator=(Content other);
 
 	void setContentType(const String& contentType);
 	void setContentEncoding(const String& contentEncoding);

@@ -21,7 +21,7 @@
 
 namespace Riak {
 
-void swap(String& first, String& second)
+void swap(String& first, String& second) throw()
 {
 	std::swap(first.riackString, second.riackString);
 }
