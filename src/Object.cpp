@@ -18,38 +18,30 @@
 #include "Object.h"
 #include "Bucket.h"
 #include "Client.h"
+#include "RiakExceptions.h"
 #include <string.h>
 
 namespace Riak {
 
-Object::Object(Bucket *bucket, const String& key) {
-	this->bucket = bucket;
-	this->key = key;
-	this->state = Ok;
-
-	this->contents.push_back(Content());
+Object::Object(Bucket *bucket, const String& key) :
+	bucket(bucket), key(key), conflicted(true) {
 }
 
 Object::~Object() {
 }
 
-ObjectState Object::getState() {
-	return state;
-}
-
-Content* Object::getContent(size_t index) {
-	if (index < 0 || index >= contents.size()) {
-		return NULL;
+const Content& Object::getConflictedContent(size_t index) {
+	if (index < 0 || index >= conflictedContents.size()) {
+		throw new std::out_of_range("index");
 	}
-	return &contents[index];
+	return conflictedContents[index];
 }
 
-bool Object::fetch() {
+Object::FetchResult Object::fetch() {
 	size_t contentCount;
 	struct RIACK_CLIENT* riackClient;
 	struct RIACK_GET_PROPERTIES props;
 	struct RIACK_GET_OBJECT getResult;
-	bool result = false;
 
 	memset(&props, 0, sizeof(props));
 	memset(&getResult, 0, sizeof(getResult));
@@ -58,57 +50,60 @@ bool Object::fetch() {
 	if (riack_get(riackClient, bucket->getName().getAsRiackString(),
 			key.getAsRiackString(), &props, &getResult) == RIACK_SUCCESS) {
 		contentCount = getResult.object.content_count;
-		if (contentCount > 0) {
-			contents.empty();
+		if (contentCount > 1) {
+			conflictedContents.empty();
 			for (size_t i=0; i<contentCount; ++i) {
-				contents.push_back(Content(getResult.object.content[i]));
+				conflictedContents.push_back(Content(getResult.object.content[i]));
 			}
-			if (contentCount > 1) {
-				state = Conflicted;
-			}
-			result = true;
+			conflicted = true;
+		} else if (contentCount > 0) {
+			conflicted = false;
+			setFromRiackContent(getResult.object.content[0], true);
 		}
 		riack_free_get_object(riackClient, &getResult);
 	}
-	return result;
+	return conflicted ? Object::fetchedConflicted : Object::fetchedOk;
 }
 
-bool Object::store() {
+void Object::store() {
 	struct RIACK_CLIENT* riackClient;
 	struct RIACK_OBJECT obj, returnedObj;
-	struct RIACK_CONTENT content;
+	struct RIACK_CONTENT riackContent;
 	struct RIACK_PUT_PROPERTIES props;
-
-	if (getState() != Ok || contents.size() != 1) {
-		return false;
-	}
+	int riackResult;
 
 	memset(&obj, 0, sizeof(obj));
 	memset(&returnedObj, 0, sizeof(returnedObj));
-	memset(&content, 0, sizeof(content));
+	memset(&riackContent, 0, sizeof(riackContent));
 	memset(&props, 0, sizeof(props));
 	props.return_head_use = 1;
 	props.return_head = 1;
-	content.content_type = contents[0].getContentType().getAsRiackString();
-	content.content_encoding = contents[0].getContentEncoding().getAsRiackString();
-	content.data = contents[0].getValue();
-	content.data_len = contents[0].getValueLength();
+	riackContent.content_type = getContentType().getAsRiackString();
+	riackContent.content_encoding = getContentEncoding().getAsRiackString();
+	riackContent.data = getValue();
+	riackContent.data_len = getValueLength();
 
 	obj.bucket = bucket->getName().getAsRiackString();
 	obj.key = key.getAsRiackString();
 	obj.content_count = 1;
-	obj.content = &content;
+	obj.content = &riackContent;
 	riackClient = bucket->getClient()->getRiackClient();
-	if (riack_put(riackClient, obj, &returnedObj, &props) == RIACK_SUCCESS) {
+	riackResult = riack_put(riackClient, obj, &returnedObj, &props);
+	if (riackResult == RIACK_SUCCESS) {
 		if (returnedObj.content_count == 1) {
-			contents[0].setFromRiackContent(returnedObj.content[0], (props.return_body_use && props.return_body));
-		} else {
-			// TODO conflicted
+			setFromRiackContent(returnedObj.content[0], (props.return_body_use && props.return_body));
 		}
 		riack_free_object(riackClient, &returnedObj);
-		return true;
+		if (returnedObj.content_count > 1) {
+			throw new ConflictedException("Object is now conflicted", bucket->getName().toStdString(), key.toStdString());
+		}
+	} else if (riackResult == RIACK_ERROR_COMMUNICATION) {
+		throw new TransientException("Communication error");
+	} else if (riackResult == RIACK_ERROR_RESPONSE) {
+		throw new ResponseError(riackClient->last_error, riackClient->last_error_code);
+	} else if (riackResult == RIACK_ERROR_INVALID_INPUT) {
+		throw new ArgumentsError("Invalid arguments passed to underlying Riack library");
 	}
-	return false;
 }
 
 } /* namespace Riak */

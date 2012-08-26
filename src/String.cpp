@@ -61,6 +61,10 @@ String& String::operator=(String other)
 	return *this;
 }
 
+std::string String::toStdString() const {
+	return std::string(riackString.value, riackString.len);
+}
+
 void String::initWith(const char* data, size_t dataLen)
 {
 	riackString.len = dataLen;

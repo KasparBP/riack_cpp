@@ -27,16 +27,18 @@ void GetPutTest::tearDown() {
 int GetPutTest::runTest() {
 	char data[] = "test data";
 	Object obj(bucket.get(), "test_key_1__");
-	obj.getContent(0)->setContentType("application/json");
-	obj.getContent(0)->setValue((uint8_t*)data, strlen(data));
+	obj.setContentType("application/json");
+	obj.setValue((uint8_t*)data, strlen(data));
 
-	if (!obj.store()) {
+	try {
+		obj.store();
+	} catch (...) {
 		return 1;
 	}
 
-	if (obj.fetch()) {
-		if (strlen(data) != obj.getContent(0)->getValueLength() ||
-			memcmp(data, obj.getContent(0)->getValue(), strlen(data)) != 0) {
+	if (obj.fetch() == Object::fetchedOk) {
+		if (strlen(data) != obj.getValueLength() ||
+			memcmp(data, obj.getValue(), strlen(data)) != 0) {
 			return 2;
 		}
 	} else {

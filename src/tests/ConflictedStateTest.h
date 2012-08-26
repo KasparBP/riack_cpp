@@ -3,6 +3,8 @@
 #define CONFLICTEDSTATETEST_H_
 
 #include "RiakTestCase.h"
+#include "../Bucket.h"
+#include <string>
 
 namespace Riak {
 
@@ -16,6 +18,9 @@ public:
 	virtual int runTest();
 
 	static std::string name;
+private:
+	std::auto_ptr<Bucket> bucket;
+	std::string testKeyName;
 };
 
 }

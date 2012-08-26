@@ -35,6 +35,8 @@ public:
 
 	String& operator=(String other);
 
+	std::string toStdString() const;
+
 	void setValue(const std::string& value);
 	const RIACK_STRING& getAsRiackString() const;
 private:

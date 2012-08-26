@@ -16,6 +16,7 @@
 */
 #include "Bucket.h"
 #include "Client.h"
+#include "Object.h"
 
 namespace Riak {
 
@@ -33,6 +34,14 @@ Client* Bucket::getClient() {
 
 const String& Bucket::getName() const {
 	return name;
+}
+
+std::auto_ptr<Object> Bucket::fetchObject(const String &key) {
+	// TODO Check connected
+	std::auto_ptr<Object> result = std::auto_ptr<Object>(new Object(this, key));
+	if (!result->fetch()) {
+	}
+	return result;
 }
 
 } /* namespace Riak */

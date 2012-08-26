@@ -18,10 +18,12 @@
 #define RIACKCPP_BUCKET_H_
 
 #include "String.h"
+#include <memory>
 
 namespace Riak {
 
 class Client;
+class Object;
 
 class Bucket {
 public:
@@ -30,6 +32,8 @@ public:
 
 	const String& getName() const;
 	Client* getClient();
+
+	std::auto_ptr<Object> fetchObject(const String &key);
 private:
 	String name;
 	Client *client;

@@ -27,28 +27,25 @@ namespace Riak {
 
 class Bucket;
 
-typedef enum {
-	Ok,
-	Conflicted
-} ObjectState;
-
-class Object {
+class Object : public Content {
 public:
+	typedef enum {
+		fetchedOk,
+		fetchedConflicted
+	} FetchResult;
+
 	Object(Bucket *bucket, const String& key);
 	virtual ~Object();
 
-	ObjectState getState();
+	FetchResult fetch();
+	void store();
 
-	bool fetch();
-	bool store();
-
-	Content* getContent(size_t index);
+	const Content& getConflictedContent(size_t index);
 private:
-	ObjectState state;
-
 	Bucket *bucket;
 	String key;
-	std::vector<Content> contents;
+	bool conflicted;
+	std::vector<Content> conflictedContents;
 };
 
 } /* namespace Riak */

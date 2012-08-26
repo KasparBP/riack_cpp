@@ -4,7 +4,7 @@
 
 namespace Riak {
 
-#define TEST_BUCKET_NAME "TEST_BUCKET"
+#define TEST_BUCKET_NAME "BUCKET_TEST"
 
 RiakTestCase::RiakTestCase(const std::vector<std::string> &arguments)
 	: TestCase(arguments) {

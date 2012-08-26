@@ -16,10 +16,17 @@ include_directories(${RIACK_INCLUDE_DIRS})
 set(LIBS ${LIBS} ${RIACK_LIBRARIES})
 
 SET(RIACKCPP_SRC	Client.cpp
+					Client.h
 					Bucket.cpp
+					Bucket.h
 					Object.cpp
+					Object.h
 					String.cpp
-					Content.cpp)
+					String.h
+					Content.cpp
+					Content.h
+					RiakExceptions.h
+					)
 
 SET(TEST_SRC        tests/TestHandler.cpp
                     tests/TestHandler.h
