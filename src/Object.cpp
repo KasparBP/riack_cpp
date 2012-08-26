@@ -30,11 +30,36 @@ Object::Object(Bucket *bucket, const String& key) :
 Object::~Object() {
 }
 
-const Content& Object::getConflictedContent(size_t index) {
-	if (index < 0 || index >= conflictedContents.size()) {
-		throw new std::out_of_range("index");
+size_t Object::getSiblingCount() {
+	return siblings.size();
+}
+
+const Content& Object::getSibling(size_t index) {
+	if (index < 0 || index >= siblings.size()) {
+		throw std::out_of_range("index");
 	}
-	return conflictedContents[index];
+	return siblings[index];
+}
+
+void Object::chooseSibling(size_t index) {
+	if (index < 0 || index >= siblings.size()) {
+		throw std::out_of_range("index");
+	}
+	// TODO
+}
+
+void Object::burry() {
+	struct RIACK_CLIENT* riackClient;
+	int riackResult;
+	riackClient = bucket->getClient()->getRiackClient();
+	riackResult = riack_delete(riackClient, bucket->getName().getAsRiackString(), key.getAsRiackString(), 0);
+	if (riackResult == RIACK_ERROR_COMMUNICATION) {
+		throw TransientException("Communication error");
+	} else if (riackResult == RIACK_ERROR_RESPONSE) {
+		throw ResponseError(riackClient->last_error, riackClient->last_error_code);
+	} else if (riackResult == RIACK_ERROR_INVALID_INPUT) {
+		throw ArgumentsError("Invalid arguments passed to underlying Riack library");
+	}
 }
 
 Object::FetchResult Object::fetch() {
@@ -47,13 +72,14 @@ Object::FetchResult Object::fetch() {
 	memset(&getResult, 0, sizeof(getResult));
 
 	riackClient = bucket->getClient()->getRiackClient();
+	// TODO Throw appropriate exception
 	if (riack_get(riackClient, bucket->getName().getAsRiackString(),
 			key.getAsRiackString(), &props, &getResult) == RIACK_SUCCESS) {
 		contentCount = getResult.object.content_count;
 		if (contentCount > 1) {
-			conflictedContents.empty();
+			siblings.empty();
 			for (size_t i=0; i<contentCount; ++i) {
-				conflictedContents.push_back(Content(getResult.object.content[i]));
+				siblings.push_back(Content(getResult.object.content[i]));
 			}
 			conflicted = true;
 		} else if (contentCount > 0) {
@@ -95,14 +121,14 @@ void Object::store() {
 		}
 		riack_free_object(riackClient, &returnedObj);
 		if (returnedObj.content_count > 1) {
-			throw new ConflictedException("Object is now conflicted", bucket->getName().toStdString(), key.toStdString());
+			throw ConflictedException("Object is now conflicted", bucket->getName().toStdString(), key.toStdString());
 		}
 	} else if (riackResult == RIACK_ERROR_COMMUNICATION) {
-		throw new TransientException("Communication error");
+		throw TransientException("Communication error");
 	} else if (riackResult == RIACK_ERROR_RESPONSE) {
-		throw new ResponseError(riackClient->last_error, riackClient->last_error_code);
+		throw ResponseError(riackClient->last_error, riackClient->last_error_code);
 	} else if (riackResult == RIACK_ERROR_INVALID_INPUT) {
-		throw new ArgumentsError("Invalid arguments passed to underlying Riack library");
+		throw ArgumentsError("Invalid arguments passed to underlying Riack library");
 	}
 }
 

@@ -39,13 +39,16 @@ public:
 
 	FetchResult fetch();
 	void store();
+	void burry(); // TODO Rename
 
-	const Content& getConflictedContent(size_t index);
+	size_t getSiblingCount();
+	const Content& getSibling(size_t index);
+	void chooseSibling(size_t index);
 private:
 	Bucket *bucket;
 	String key;
 	bool conflicted;
-	std::vector<Content> conflictedContents;
+	std::vector<Content> siblings;
 };
 
 } /* namespace Riak */

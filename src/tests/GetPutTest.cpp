@@ -2,6 +2,7 @@
 #include "GetPutTest.h"
 #include <string.h>
 #include "../Object.h"
+#include "../RiakExceptions.h"
 
 namespace Riak {
 
@@ -32,6 +33,9 @@ int GetPutTest::runTest() {
 
 	try {
 		obj.store();
+	} catch (ConflictedException&) {
+		obj.burry();
+		return 1;
 	} catch (...) {
 		return 1;
 	}
@@ -44,6 +48,7 @@ int GetPutTest::runTest() {
 	} else {
 		return 3;
 	}
+	obj.burry();
 	return 0;
 }
 

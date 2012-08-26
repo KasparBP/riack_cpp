@@ -41,12 +41,12 @@ int ConflictedStateTest::runTest() {
 	try {
 		object2.store();
 	} catch (ConflictedException& exception) {
-		return 2;
+		object.fetch();
+		return 0;
 	} catch (...) {
 		return 3;
 	}
-	object.fetch();
-	return 0;
+	return 4;
 }
 
 }

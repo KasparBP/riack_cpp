@@ -41,9 +41,12 @@ public:
 
 	void setFromRiackContent(const struct RIACK_CONTENT& content, bool hasData);
 
-	String getContentType();
-	String getContentEncoding();
-	String getVtag();
+	const String& getContentType() const;
+	const String& getContentEncoding() const;
+	const String& getVtag() const;
+
+	const uint8_t* getValue() const;
+	const size_t getValueLength() const;
 
 	uint8_t* getValue();
 	size_t getValueLength();

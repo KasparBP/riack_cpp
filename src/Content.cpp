@@ -89,16 +89,24 @@ void Content::setFromRiackContent(const struct RIACK_CONTENT& content, bool hasD
 	}
 }
 
-String Content::getContentType() {
+const String& Content::getContentType() const {
 	return contentType;
 }
 
-String Content::getContentEncoding() {
+const String& Content::getContentEncoding() const {
 	return contentEncoding;
 }
 
-String Content::getVtag() {
+const String& Content::getVtag() const {
 	return vtag;
+}
+
+const uint8_t* Content::getValue() const {
+	return value;
+}
+
+const size_t Content::getValueLength() const {
+	return valueLength;
 }
 
 uint8_t* Content::getValue() {
