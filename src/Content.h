@@ -36,7 +36,7 @@ public:
 
 	void setContentType(const String& contentType);
 	void setContentEncoding(const String& contentEncoding);
-
+	void setVtag(const String& vtag);
 	void setValue(uint8_t *value, size_t valueLength);
 
 	void setFromRiackContent(const struct RIACK_CONTENT& content, bool hasData);

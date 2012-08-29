@@ -27,28 +27,27 @@ void GetPutTest::tearDown() {
 
 int GetPutTest::runTest() {
 	char data[] = "test data";
-	Object obj(bucket.get(), "test_key_1__");
-	obj.setContentType("application/json");
-	obj.setValue((uint8_t*)data, strlen(data));
+	Object object("test_key_1__");//getClient().fetch(*bucket, "test_key_1__");
+	object.setContentType("application/json");
+	object.setValue((uint8_t*)data, strlen(data));
 
 	try {
-		obj.store();
+		getClient().store(*bucket, object.getKey(), object);
 	} catch (ConflictedException&) {
-		obj.burry();
 		return 1;
 	} catch (...) {
 		return 1;
 	}
 
-	if (obj.fetch() == Object::fetchedOk) {
-		if (strlen(data) != obj.getValueLength() ||
-			memcmp(data, obj.getValue(), strlen(data)) != 0) {
+	if (getClient().fetch(*bucket, object)) {
+		if (strlen(data) != object.getValueLength() ||
+			memcmp(data, object.getValue(), strlen(data)) != 0) {
 			return 2;
 		}
 	} else {
 		return 3;
 	}
-	obj.burry();
+	getClient().del(*bucket, object);
 	return 0;
 }
 

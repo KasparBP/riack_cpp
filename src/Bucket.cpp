@@ -36,11 +36,11 @@ Client* Bucket::getClient() {
 const String& Bucket::getName() const {
 	return name;
 }
-
+/*
 std::auto_ptr<Object> Bucket::fetchObject(const String &key) {
 	std::auto_ptr<Object> result = std::auto_ptr<Object>(new Object(this, key));
 	result->fetch();
 	return result;
 }
-
+*/
 } /* namespace Riak */

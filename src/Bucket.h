@@ -33,7 +33,7 @@ public:
 	const String& getName() const;
 	Client* getClient();
 
-	std::auto_ptr<Object> fetchObject(const String &key);
+	//std::auto_ptr<Object> fetchObject(const String &key);
 private:
 	String name;
 	Client *client;

@@ -19,6 +19,8 @@
 
 #include <stdexcept>
 #include <string>
+#include <vector>
+#include "String.h"
 
 namespace Riak {
 
@@ -31,15 +33,18 @@ public:
 
 class ConflictedException : public std::runtime_error {
 public:
-	explicit ConflictedException(const std::string& message, const std::string& bucket, const std::string& key)
-		: std::runtime_error(message), bucket(bucket), key(key) {}
+	explicit ConflictedException(const String& bucket, const String& key,
+			const std::vector<String>& vtags)
+		: std::runtime_error("conflicted"), bucket(bucket), key(key), vtags(vtags) {}
 	virtual ~ConflictedException() throw() {}
 
-	const std::string getBucketName() const {return bucket;}
-	const std::string getKeyName() const {return key;}
+	const String& getBucketName() const {return bucket;}
+	const String& getKeyName() const {return key;}
+	const std::vector<String> &getSiblingVtags() const {return vtags;};
 private:
-	const std::string bucket;
-	const std::string key;
+	const String bucket;
+	const String key;
+	const std::vector<String> vtags;
 };
 
 class ArgumentsError : public std::logic_error {

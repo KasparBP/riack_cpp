@@ -65,6 +65,10 @@ void Content::setContentEncoding(const String& contentEncoding) {
 	this->contentEncoding = contentEncoding;
 }
 
+void Content::setVtag(const String& vtag) {
+	this->vtag = vtag;
+}
+
 void Content::reset() {
 	if (value != 0 && valueLength > 0) {
 		delete [] value;

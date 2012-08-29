@@ -21,34 +21,46 @@
 #include <vector>
 #include "RiackCpp.h"
 #include "String.h"
-#include "Content.h"
 
 namespace Riak {
 
-class Bucket;
-
-class Object : public Content {
+class Object {
+	friend void swap(Object& first, Object& second) throw();
 public:
-	typedef enum {
-		fetchedOk,
-		fetchedConflicted
-	} FetchResult;
-
-	Object(Bucket *bucket, const String& key);
+	Object(const String& key);
 	virtual ~Object();
 
-	FetchResult fetch();
-	void store();
-	void burry(); // TODO Rename
+	const String& getKey() const;
 
-	size_t getSiblingCount();
-	const Content& getSibling(size_t index);
-	void chooseSibling(size_t index);
+	Object& operator=(Object other);
+
+	void setContentType(const String& contentType);
+	void setContentEncoding(const String& contentEncoding);
+	void setVtag(const String& vtag);
+	void setValue(uint8_t *value, size_t valueLength);
+
+	void setFromRiackContent(const struct RIACK_CONTENT& content, bool hasData);
+
+	const String& getContentType() const;
+	const String& getContentEncoding() const;
+	const String& getVtag() const;
+
+	const uint8_t* getValue() const;
+	const size_t getValueLength() const;
+
+	uint8_t* getValue();
+	size_t getValueLength();
 private:
-	Bucket *bucket;
+	void reset();
+
 	String key;
-	bool conflicted;
-	std::vector<Content> siblings;
+
+	String contentType;
+	String contentEncoding;
+	String vtag;
+
+	size_t valueLength;
+	uint8_t *value;
 };
 
 } /* namespace Riak */

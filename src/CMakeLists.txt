@@ -23,8 +23,6 @@ SET(RIACKCPP_SRC	Client.cpp
 					Object.h
 					String.cpp
 					String.h
-					Content.cpp
-					Content.h
 					RiakExceptions.h
 					)
 

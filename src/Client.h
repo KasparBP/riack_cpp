@@ -17,10 +17,15 @@
 #ifndef RIACKCPP_CLIENT_H__
 #define RIACKCPP_CLIENT_H__
 
+#include <memory>
 #include <string>
+#include "String.h"
 #include "RiackCpp.h"
 
 namespace Riak {
+
+class Bucket;
+class Object;
 
 class Client {
 public:
@@ -32,8 +37,15 @@ public:
 	bool connect();
 	bool ping();
 
+	std::auto_ptr<Object> fetch(const Bucket& bucket, const String& key);
+	bool fetch(const Bucket& bucket, Object &object);
+	void store(const Bucket& bucket, const String& key, const Object& object);
+
+	void del(const Bucket& bucket, Object& object);
+
 	struct RIACK_CLIENT *getRiackClient();
 private:
+	bool fetch(Object &object, const Bucket& bucket, const String& key, const String *vtag = NULL);
 
 	std::string host;
 	int port;
