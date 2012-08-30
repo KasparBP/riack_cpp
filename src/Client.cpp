@@ -122,9 +122,9 @@ bool Client::fetch(const Bucket& bucket, Object &object) {
 	return fetch(object, bucket, object.getKey(), NULL);
 }
 
-std::auto_ptr<Object> Client::fetch(const Bucket& bucket, const String& key) {
+std::auto_ptr<Object> Client::fetch(const Bucket& bucket, const String& key, const String *vtag) {
 	std::auto_ptr<Object> result = std::auto_ptr<Object>(new Object(key));
-	if (!fetch(*result, bucket, key, NULL)) {
+	if (!fetch(*result, bucket, key, vtag)) {
 		result.reset(0);
 	}
 	return result;
@@ -139,9 +139,8 @@ bool Client::fetch(Object &object, const Bucket& bucket, const String& key, cons
 	memset(&props, 0, sizeof(props));
 	memset(&getResult, 0, sizeof(getResult));
 
-	// TODO Throw appropriate exception
-	if (riack_get(getRiackClient(), bucket.getName().getAsRiackString(),
-			key.getAsRiackString(), &props, &getResult) == RIACK_SUCCESS) {
+	int riackResult = riack_get(getRiackClient(), bucket.getName().getAsRiackString(), key.getAsRiackString(), &props, &getResult);
+	if (riackResult == RIACK_SUCCESS) {
 		contentCount = getResult.object.content_count;
 		if (contentCount > 1) {
 			std::vector<String> vtags;
@@ -154,8 +153,17 @@ bool Client::fetch(Object &object, const Bucket& bucket, const String& key, cons
 			result = true;
 		}
 		riack_free_get_object(getRiackClient(), &getResult);
+	} else if (riackResult == RIACK_ERROR_COMMUNICATION) {
+		throw TransientException("Communication error");
+	} else if (riackResult == RIACK_ERROR_RESPONSE) {
+		throw ResponseError(getRiackClient()->last_error, getRiackClient()->last_error_code);
+	} else if (riackResult == RIACK_ERROR_INVALID_INPUT) {
+		throw ArgumentsError("Invalid arguments passed to underlying Riack library");
 	}
 	return result;
+}
+
+void Client::resolve(Object& object, Resolver& resolver, ConflictedException& conflict) {
 }
 
 } /* namespace Riak */

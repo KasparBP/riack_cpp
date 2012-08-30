@@ -23,6 +23,9 @@ SET(RIACKCPP_SRC	Client.cpp
 					Object.h
 					String.cpp
 					String.h
+					Resolver.h
+					DefaultResolver.h
+					DefaultResolver.cpp
 					RiakExceptions.h
 					)
 

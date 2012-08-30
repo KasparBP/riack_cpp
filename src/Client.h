@@ -20,6 +20,7 @@
 #include <memory>
 #include <string>
 #include "String.h"
+#include "Resolver.h"
 #include "RiackCpp.h"
 
 namespace Riak {
@@ -37,11 +38,13 @@ public:
 	bool connect();
 	bool ping();
 
-	std::auto_ptr<Object> fetch(const Bucket& bucket, const String& key);
+	std::auto_ptr<Object> fetch(const Bucket& bucket, const String& key, const String *vtag = NULL);
 	bool fetch(const Bucket& bucket, Object &object);
 	void store(const Bucket& bucket, const String& key, const Object& object);
 
 	void del(const Bucket& bucket, Object& object);
+
+	void resolve(Object& object, Resolver& resolver, ConflictedException& conflict);
 
 	struct RIACK_CLIENT *getRiackClient();
 private:
