@@ -20,7 +20,7 @@
 #include <memory>
 #include <string>
 #include "String.h"
-#include "Resolver.h"
+#include "RiakExceptions.h"
 #include "RiackCpp.h"
 
 namespace Riak {

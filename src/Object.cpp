@@ -30,12 +30,13 @@ void swap(Object& first, Object& second) throw()
 	std::swap(first.contentEncoding, first.contentEncoding);
 	std::swap(first.contentType, first.contentType);
 	std::swap(first.vtag, first.vtag);
+	std::swap(first.vClock, first.vClock);
 	std::swap(first.key, first.key);
 }
 
 
 Object::Object(const String& key) :
-	key(key), value(0), valueLength(0) {
+	vClock(0), key(key), value(0), valueLength(0) {
 }
 
 Object::~Object() {
@@ -53,6 +54,10 @@ void Object::setContentType(const String& contentType) {
 
 void Object::setContentEncoding(const String& contentEncoding) {
 	this->contentEncoding = contentEncoding;
+}
+
+void Object::setVClock(uint8_t *clockData, size_t clockLen) {
+	this->vClock = String(clockData, clockLen);
 }
 
 void Object::setVtag(const String& vtag) {
@@ -93,6 +98,10 @@ const String& Object::getContentEncoding() const {
 
 const String& Object::getVtag() const {
 	return vtag;
+}
+
+const String& Object::getVClock() const {
+	return vClock;
 }
 
 const uint8_t* Object::getValue() const {

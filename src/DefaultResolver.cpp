@@ -20,33 +20,23 @@
 
 namespace Riak {
 
-DefaultResolver::DefaultResolver(Client &client, const Bucket& bucket) :
-		Resolver(client, bucket) {
-}
-
 std::auto_ptr<Object> DefaultResolver::chooseBestObject(std::auto_ptr<Object> obj1,
 		std::auto_ptr<Object> obj2) {
 	// TODO
 	return obj2;
 }
 
-const String DefaultResolver::resolve(Object& object, const std::vector<String> &vtags) {
-	std::vector<String>::const_iterator iter;
+std::auto_ptr<Object> DefaultResolver::resolve(ConflictedObjectsVector conflictedObjects) {
+	ConflictedObjectsVector::iterator iter;
 	std::auto_ptr<Object> currentlyChoosenObject;
-	for (iter = vtags.begin(); iter != vtags.end(); ++iter) {
-		const String &currentVtag = *iter;
-		std::auto_ptr<Object> currentObject = client.fetch(bucket, object.getKey(), &currentVtag);
+	for (iter = conflictedObjects.begin(); iter != conflictedObjects.end(); ++iter) {
 		if (currentlyChoosenObject.get() != NULL) {
-			currentlyChoosenObject = chooseBestObject(currentlyChoosenObject, currentObject);
+			currentlyChoosenObject = chooseBestObject(currentlyChoosenObject, *iter);
 		} else {
-			currentlyChoosenObject = currentObject;
+			currentlyChoosenObject = *iter;
 		}
 	}
-	if (currentlyChoosenObject.get() == NULL) {
-		// TODO Throw bad exception
-	}
-	object = *currentlyChoosenObject;
-	return currentlyChoosenObject->getVtag();
+	return currentlyChoosenObject;
 }
 
 } /* namespace Riak */

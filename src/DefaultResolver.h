@@ -25,9 +25,7 @@ namespace Riak {
 
 class DefaultResolver : public Resolver {
 public:
-	DefaultResolver(Client &client, const Bucket& bucket);
-
-	virtual const String resolve(Object& object, const std::vector<String> &vtags);
+	virtual std::auto_ptr<Object> resolve(ConflictedObjectsVector conflictedObjects);
 
 protected:
 	std::auto_ptr<Object> chooseBestObject(std::auto_ptr<Object> obj1, std::auto_ptr<Object> obj2);

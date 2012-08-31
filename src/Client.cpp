@@ -94,7 +94,7 @@ void Client::store(const Bucket& bucket, const String& key, const Object& object
 			for (size_t i=0; i<returnedObj.content_count; ++i) {
 				vtags.push_back(returnedObj.content[i].vtag);
 			}
-			throw ConflictedException(bucket.getName(), key, vtags);
+	//		throw ConflictedException(bucket.getName(), key, vtags);
 		}
 	} else if (riackResult == RIACK_ERROR_COMMUNICATION) {
 		throw TransientException("Communication error");
@@ -143,13 +143,19 @@ bool Client::fetch(Object &object, const Bucket& bucket, const String& key, cons
 	if (riackResult == RIACK_SUCCESS) {
 		contentCount = getResult.object.content_count;
 		if (contentCount > 1) {
-			std::vector<String> vtags;
+			ConflictedObjectsVector conflictedObjects;
 			for (size_t i=0; i<contentCount; ++i) {
-				vtags.push_back(getResult.object.content[i].vtag);
+				ObjectAutoPtr currentObject(new Object(key));
+				currentObject->setFromRiackContent(getResult.object.content[i], true);
+				currentObject->setVClock(getResult.object.vclock.clock,
+					getResult.object.vclock.len);
+				conflictedObjects.push_back(currentObject);
 			}
-			throw ConflictedException(bucket.getName(), key, vtags);
+			throw ConflictedException(bucket.getName(), key, conflictedObjects);
 		} else if (contentCount > 0) {
 			object.setFromRiackContent(getResult.object.content[0], true);
+			object.setVClock(getResult.object.vclock.clock,
+					getResult.object.vclock.len);
 			result = true;
 		}
 		riack_free_get_object(getRiackClient(), &getResult);

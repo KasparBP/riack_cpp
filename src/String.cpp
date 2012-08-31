@@ -46,6 +46,10 @@ String::String(const char* str)
 	initWith(str, strlen(str));
 }
 
+String::String(const char* str, size_t length) {
+	initWith(str, length);
+}
+
 String::String(const RIACK_STRING& str) {
 	initWith(str.value, str.len);
 }

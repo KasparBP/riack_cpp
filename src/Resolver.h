@@ -18,22 +18,19 @@
 #define RESOLVER_H_
 
 #include "String.h"
+#include "Object.h"
 #include <vector>
+#include <memory>
 
 namespace Riak {
 
-class Client;
-class Object;
-class Bucket;
+typedef std::vector<ObjectAutoPtr> ConflictedObjectsVector;
 
 class Resolver {
 public:
-	Resolver(Client &client, const Bucket& bucket) : client(client), bucket(bucket) {}
 	virtual ~Resolver() {}
-	virtual const String resolve(Object& object, const std::vector<String> &vtags) = 0;
+	virtual std::auto_ptr<Object> resolve(ConflictedObjectsVector conflictedObjects) = 0;
 protected:
-	const Bucket& bucket;
-	Client& client;
 };
 
 } /* namespace Riak */

@@ -21,6 +21,7 @@
 #include <string>
 #include <vector>
 #include "String.h"
+#include "Resolver.h"
 
 namespace Riak {
 
@@ -34,17 +35,17 @@ public:
 class ConflictedException : public std::runtime_error {
 public:
 	explicit ConflictedException(const String& bucket, const String& key,
-			const std::vector<String>& vtags)
-		: std::runtime_error("conflicted"), bucket(bucket), key(key), vtags(vtags) {}
+			const ConflictedObjectsVector& conflictedObjects)
+		: std::runtime_error("conflicted"), bucket(bucket), key(key), conflictedObjects(conflictedObjects) {}
 	virtual ~ConflictedException() throw() {}
 
 	const String& getBucketName() const {return bucket;}
 	const String& getKeyName() const {return key;}
-	const std::vector<String> &getSiblingVtags() const {return vtags;};
+	const ConflictedObjectsVector& getConflictedObjects() const {return conflictedObjects;}
 private:
 	const String bucket;
 	const String key;
-	const std::vector<String> vtags;
+	const ConflictedObjectsVector conflictedObjects;
 };
 
 class ArgumentsError : public std::logic_error {

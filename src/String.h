@@ -31,6 +31,7 @@ public:
 	String(const String& str);
 	String(const RIACK_STRING& str);
 	String(const char* str);
+	String(const char* str, size_t length);
 	virtual ~String();
 
 	String& operator=(String other);

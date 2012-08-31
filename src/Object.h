@@ -39,11 +39,15 @@ public:
 	void setVtag(const String& vtag);
 	void setValue(uint8_t *value, size_t valueLength);
 
+	void setVClock(uint8_t *clockData, size_t clockLen);
+
 	void setFromRiackContent(const struct RIACK_CONTENT& content, bool hasData);
 
 	const String& getContentType() const;
 	const String& getContentEncoding() const;
 	const String& getVtag() const;
+
+	const String& getVClock() const;
 
 	const uint8_t* getValue() const;
 	const size_t getValueLength() const;
@@ -52,6 +56,8 @@ public:
 	size_t getValueLength();
 private:
 	void reset();
+
+	String vClock;
 
 	String key;
 
@@ -62,6 +68,8 @@ private:
 	size_t valueLength;
 	uint8_t *value;
 };
+
+typedef std::auto_ptr<Object> ObjectAutoPtr;
 
 } /* namespace Riak */
 #endif /* RIACKCPP_OBJECT_H_ */
