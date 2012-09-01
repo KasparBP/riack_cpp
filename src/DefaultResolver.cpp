@@ -26,7 +26,7 @@ Object& DefaultResolver::chooseBestObject(Object& obj1,
 	return obj2;
 }
 
-Object& DefaultResolver::resolve(ConflictedObjectsVector& conflictedObjects) {
+Object DefaultResolver::resolve(ConflictedObjectsVector conflictedObjects) {
 	ConflictedObjectsVector::iterator iter;
 	Object *currentlyChoosenObject = NULL;
 	for (iter = conflictedObjects.begin(); iter != conflictedObjects.end(); ++iter) {

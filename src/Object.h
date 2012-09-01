@@ -19,6 +19,7 @@
 #define RIACKCPP_OBJECT_H_
 
 #include <vector>
+#include <memory>
 #include "RiackCpp.h"
 #include "String.h"
 
