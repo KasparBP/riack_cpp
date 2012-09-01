@@ -41,11 +41,11 @@ public:
 
 	const String& getBucketName() const {return bucket;}
 	const String& getKeyName() const {return key;}
-	ConflictedObjectsVector& getConflictedObjects() {return conflictedObjects;}
+	const ConflictedObjectsVector getConflictedObjects() const {return conflictedObjects;}
 private:
 	const String bucket;
 	const String key;
-	ConflictedObjectsVector conflictedObjects;
+	const ConflictedObjectsVector conflictedObjects;
 };
 
 class ArgumentsError : public std::logic_error {

@@ -28,6 +28,7 @@ class Object {
 	friend void swap(Object& first, Object& second) throw();
 public:
 	Object(const String& key);
+	Object(const Object& other);
 	virtual ~Object();
 
 	const String& getKey() const;

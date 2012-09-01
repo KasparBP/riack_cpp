@@ -170,8 +170,9 @@ bool Client::fetch(Object &object, const Bucket& bucket, const String& key) {
 	return result;
 }
 
-Object Client::resolve(Resolver& resolver, ConflictedException& conflict) {
-	return resolver.resolve(conflict.getConflictedObjects());
+Object Client::resolve(Resolver& resolver, ConflictedException& exception) {
+	ConflictedObjectsVector objects = exception.getConflictedObjects();
+	return resolver.resolve(objects);
 }
 
 } /* namespace Riak */

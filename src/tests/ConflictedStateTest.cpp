@@ -60,7 +60,8 @@ int ConflictedStateTest::runTest() {
 			getClient().store(*bucket, testKeyName, resolved);
 			// Fetch to make sure we are not conflicted
 			return 0;
-		} catch (...) {
+		} catch (std::runtime_error& err) {
+			std::cout << err.what() << std::endl;
 			return 2;
 		}
 	} catch (...) {

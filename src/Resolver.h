@@ -29,7 +29,7 @@ typedef std::vector<Object> ConflictedObjectsVector;
 class Resolver {
 public:
 	virtual ~Resolver() {}
-	virtual Object resolve(ConflictedObjectsVector conflictedObjects) = 0;
+	virtual Object& resolve(ConflictedObjectsVector& conflictedObjects) = 0;
 protected:
 };
 

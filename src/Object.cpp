@@ -39,7 +39,18 @@ Object::Object(const String& key) :
 	key(key), valueLength(0), value(0) {
 }
 
+Object::Object(const Object& other) :
+	valueLength(0), value(0) {
+	setValue(other.value, other.valueLength);
+	contentEncoding = other.contentEncoding;
+	contentType = other.contentType;
+	vtag = other.vtag;
+	vClock = other.vClock;
+	key = other.key;
+}
+
 Object::~Object() {
+	reset();
 }
 
 

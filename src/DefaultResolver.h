@@ -25,7 +25,7 @@ namespace Riak {
 
 class DefaultResolver : public Resolver {
 public:
-	virtual Object resolve(ConflictedObjectsVector conflictedObjects);
+	virtual Object& resolve(ConflictedObjectsVector& conflictedObjects);
 
 protected:
 	Object& chooseBestObject(Object& obj1, Object& obj2);

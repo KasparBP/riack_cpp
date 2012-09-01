@@ -44,7 +44,7 @@ public:
 
 	void del(const Bucket& bucket, Object& object);
 
-	Object resolve(Resolver& resolver, ConflictedException& conflict);
+	Object resolve(Resolver& resolver, ConflictedException& exception);
 
 	struct RIACK_CLIENT *getRiackClient();
 private:
