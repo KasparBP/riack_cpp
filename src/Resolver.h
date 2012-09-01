@@ -24,12 +24,12 @@
 
 namespace Riak {
 
-typedef std::vector<ObjectAutoPtr> ConflictedObjectsVector;
+typedef std::vector<Object> ConflictedObjectsVector;
 
 class Resolver {
 public:
 	virtual ~Resolver() {}
-	virtual std::auto_ptr<Object> resolve(ConflictedObjectsVector conflictedObjects) = 0;
+	virtual Object resolve(ConflictedObjectsVector conflictedObjects) = 0;
 protected:
 };
 

@@ -36,7 +36,7 @@ void swap(Object& first, Object& second) throw()
 
 
 Object::Object(const String& key) :
-	vClock(0), key(key), value(0), valueLength(0) {
+	key(key), valueLength(0), value(0) {
 }
 
 Object::~Object() {
@@ -57,7 +57,7 @@ void Object::setContentEncoding(const String& contentEncoding) {
 }
 
 void Object::setVClock(uint8_t *clockData, size_t clockLen) {
-	this->vClock = String(clockData, clockLen);
+	this->vClock = String((char*)clockData, clockLen);
 }
 
 void Object::setVtag(const String& vtag) {

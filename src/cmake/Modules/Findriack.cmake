@@ -30,12 +30,14 @@ FIND_PATH(RIACK_INCLUDE_DIR
   NAMES riack.h
   PATHS
   ${RIACK_INCLUDE_DIRS}
+  /usr/local
 )
 
 FIND_LIBRARY(RIACK_LIBRARIES 
   NAMES riack
   PATHS
   ${RIACK_LIBRARY_DIRS}
+  /usr/local
 )
 
 include(FindPackageHandleStandardArgs)

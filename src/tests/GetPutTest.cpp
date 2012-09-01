@@ -34,7 +34,9 @@ int GetPutTest::runTest() {
 	try {
 		getClient().store(*bucket, object.getKey(), object);
 	} catch (ConflictedException&) {
-		return 1;
+		getClient().del(*bucket, object);
+		sleep(5);
+		getClient().store(*bucket, object.getKey(), object);
 	} catch (...) {
 		return 1;
 	}

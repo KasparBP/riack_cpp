@@ -80,8 +80,7 @@ void String::initWith(const char* data, size_t dataLen)
 	}
 }
 
-void String::reset()
-{
+void String::reset() {
 	if (riackString.value != 0 && riackString.len > 0) {
 		delete [] riackString.value;
 	}
@@ -89,15 +88,17 @@ void String::reset()
 	riackString.len = 0;
 }
 
-void String::setValue(const std::string& value)
-{
+void String::setValue(const std::string& value) {
 	reset();
 	initWith(value.c_str(), value.length());
 }
 
-const RIACK_STRING& String::getAsRiackString() const
-{
+const RIACK_STRING& String::getAsRiackString() const {
 	return riackString;
+}
+
+const size_t String::getStringLength() const {
+	return riackString.len;
 }
 
 } /* namespace Riak */

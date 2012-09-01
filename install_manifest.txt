@@ -1,6 +1,0 @@
-/usr/local/lib/libriack++.dylib
-/usr/local/include/riack++/Client.h
-/usr/local/include/riack++/Bucket.h
-/usr/local/include/riack++/Object.h
-/usr/local/include/riack++/String.h
-/usr/local/include/riack++/Content.h

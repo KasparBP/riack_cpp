@@ -35,17 +35,17 @@ public:
 class ConflictedException : public std::runtime_error {
 public:
 	explicit ConflictedException(const String& bucket, const String& key,
-			const ConflictedObjectsVector& conflictedObjects)
+			ConflictedObjectsVector& conflictedObjects)
 		: std::runtime_error("conflicted"), bucket(bucket), key(key), conflictedObjects(conflictedObjects) {}
 	virtual ~ConflictedException() throw() {}
 
 	const String& getBucketName() const {return bucket;}
 	const String& getKeyName() const {return key;}
-	const ConflictedObjectsVector& getConflictedObjects() const {return conflictedObjects;}
+	ConflictedObjectsVector& getConflictedObjects() {return conflictedObjects;}
 private:
 	const String bucket;
 	const String key;
-	const ConflictedObjectsVector conflictedObjects;
+	ConflictedObjectsVector conflictedObjects;
 };
 
 class ArgumentsError : public std::logic_error {

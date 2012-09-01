@@ -86,15 +86,16 @@ void Client::store(const Bucket& bucket, const String& key, const Object& object
 	obj.key = key.getAsRiackString();
 	obj.content_count = 1;
 	obj.content = &riackContent;
+	obj.vclock.clock = (uint8_t*)object.getVClock().getAsRiackString().value;
+	obj.vclock.len = object.getVClock().getStringLength();
 	riackResult = riack_put(getRiackClient(), obj, &returnedObj, &props);
 	if (riackResult == RIACK_SUCCESS) {
 		riack_free_object(getRiackClient(), &returnedObj);
 		if (returnedObj.content_count > 1) {
-			std::vector<String> vtags;
-			for (size_t i=0; i<returnedObj.content_count; ++i) {
-				vtags.push_back(returnedObj.content[i].vtag);
-			}
-	//		throw ConflictedException(bucket.getName(), key, vtags);
+			// More than one means conflict
+			// do a fetch which will throw a conflicted exception.
+			Object dummy(object);
+			fetch(dummy, bucket, key);
 		}
 	} else if (riackResult == RIACK_ERROR_COMMUNICATION) {
 		throw TransientException("Communication error");
@@ -119,18 +120,18 @@ void Client::del(const Bucket& bucket, Object& object) {
 }
 
 bool Client::fetch(const Bucket& bucket, Object &object) {
-	return fetch(object, bucket, object.getKey(), NULL);
+	return fetch(object, bucket, object.getKey());
 }
 
-std::auto_ptr<Object> Client::fetch(const Bucket& bucket, const String& key, const String *vtag) {
+std::auto_ptr<Object> Client::fetch(const Bucket& bucket, const String& key) {
 	std::auto_ptr<Object> result = std::auto_ptr<Object>(new Object(key));
-	if (!fetch(*result, bucket, key, vtag)) {
+	if (!fetch(*result, bucket, key)) {
 		result.reset(0);
 	}
 	return result;
 }
 
-bool Client::fetch(Object &object, const Bucket& bucket, const String& key, const String *vtag) {
+bool Client::fetch(Object &object, const Bucket& bucket, const String& key) {
 	bool result = false;
 	size_t contentCount;
 	struct RIACK_GET_PROPERTIES props;
@@ -145,9 +146,9 @@ bool Client::fetch(Object &object, const Bucket& bucket, const String& key, cons
 		if (contentCount > 1) {
 			ConflictedObjectsVector conflictedObjects;
 			for (size_t i=0; i<contentCount; ++i) {
-				ObjectAutoPtr currentObject(new Object(key));
-				currentObject->setFromRiackContent(getResult.object.content[i], true);
-				currentObject->setVClock(getResult.object.vclock.clock,
+				Object currentObject(key);
+				currentObject.setFromRiackContent(getResult.object.content[i], true);
+				currentObject.setVClock(getResult.object.vclock.clock,
 					getResult.object.vclock.len);
 				conflictedObjects.push_back(currentObject);
 			}
@@ -169,7 +170,8 @@ bool Client::fetch(Object &object, const Bucket& bucket, const String& key, cons
 	return result;
 }
 
-void Client::resolve(Object& object, Resolver& resolver, ConflictedException& conflict) {
+Object Client::resolve(Resolver& resolver, ConflictedException& conflict) {
+	return resolver.resolve(conflict.getConflictedObjects());
 }
 
 } /* namespace Riak */

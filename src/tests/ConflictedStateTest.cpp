@@ -3,6 +3,7 @@
 #include "ConflictedStateTest.h"
 #include "../Object.h"
 #include "../RiakExceptions.h"
+#include "../DefaultResolver.h"
 #include <string.h>
 #include <iostream>
 
@@ -24,6 +25,8 @@ void ConflictedStateTest::setup() {
 }
 
 void ConflictedStateTest::tearDown() {
+	Object object(testKeyName);
+	getClient().del(*bucket, object);
 	bucket.reset();
 }
 
@@ -31,29 +34,35 @@ int ConflictedStateTest::runTest() {
 	char value1[] = "value1";
 	char value2[] = "value2";
 	Object object(testKeyName);
-	getClient().fetch(*bucket, object);
+	try {
+		getClient().fetch(*bucket, object);
+	} catch (ConflictedException& exception) {
+		// Leftover conflict most likely, delete and wait for it to propegate
+		getClient().del(*bucket, object);
+		sleep(5);
+		getClient().fetch(*bucket, object);
+	} catch (std::runtime_error& other) {
+		std::cout << other.what() << std::endl;
+	}
 	object.setValue((uint8_t*)value1, strlen(value1));
-	sleep(1000);
 	try {
 		getClient().store(*bucket, testKeyName, object);
 	} catch (...) {
 		return 1;
 	}
-//	Object object2(bucket.get(), testKeyName);
 	object.setValue((uint8_t*)value2, strlen(value2));
 	try {
 		getClient().store(*bucket, testKeyName, object);
-//		object2.store();
 	} catch (ConflictedException& exception) {
 		try {
-			// object.fetch();
-			// object.chooseSibling(0);
-			// object.store();
-			std::cout << "plappe" << std::endl;
+			DefaultResolver resolver;
+			Object resolved = getClient().resolve(resolver, exception);
+			getClient().store(*bucket, testKeyName, resolved);
+			// Fetch to make sure we are not conflicted
+			return 0;
 		} catch (...) {
-			return 4;
+			return 2;
 		}
-		return 0;
 	} catch (...) {
 		return 3;
 	}

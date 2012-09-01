@@ -20,23 +20,23 @@
 
 namespace Riak {
 
-std::auto_ptr<Object> DefaultResolver::chooseBestObject(std::auto_ptr<Object> obj1,
-		std::auto_ptr<Object> obj2) {
+Object& DefaultResolver::chooseBestObject(Object& obj1,
+		Object& obj2) {
 	// TODO
 	return obj2;
 }
 
-std::auto_ptr<Object> DefaultResolver::resolve(ConflictedObjectsVector conflictedObjects) {
+Object DefaultResolver::resolve(ConflictedObjectsVector conflictedObjects) {
 	ConflictedObjectsVector::iterator iter;
-	std::auto_ptr<Object> currentlyChoosenObject;
+	Object *currentlyChoosenObject = NULL;
 	for (iter = conflictedObjects.begin(); iter != conflictedObjects.end(); ++iter) {
-		if (currentlyChoosenObject.get() != NULL) {
-			currentlyChoosenObject = chooseBestObject(currentlyChoosenObject, *iter);
+		if (currentlyChoosenObject != NULL) {
+			currentlyChoosenObject = &chooseBestObject(*currentlyChoosenObject, *iter);
 		} else {
-			currentlyChoosenObject = *iter;
+			currentlyChoosenObject = &*iter;
 		}
 	}
-	return currentlyChoosenObject;
+	return *currentlyChoosenObject;
 }
 
 } /* namespace Riak */

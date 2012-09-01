@@ -40,6 +40,7 @@ public:
 
 	void setValue(const std::string& value);
 	const RIACK_STRING& getAsRiackString() const;
+	const size_t getStringLength() const;
 private:
 	void initWith(const char* data, size_t dataLen);
 	void reset();

@@ -25,10 +25,10 @@ namespace Riak {
 
 class DefaultResolver : public Resolver {
 public:
-	virtual std::auto_ptr<Object> resolve(ConflictedObjectsVector conflictedObjects);
+	virtual Object resolve(ConflictedObjectsVector conflictedObjects);
 
 protected:
-	std::auto_ptr<Object> chooseBestObject(std::auto_ptr<Object> obj1, std::auto_ptr<Object> obj2);
+	Object& chooseBestObject(Object& obj1, Object& obj2);
 };
 
 } /* namespace Riak */
