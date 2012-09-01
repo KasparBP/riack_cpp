@@ -21,3 +21,4 @@ CTestTestfile.cmake
 CMakeFiles/
 Debug/
 Testing/
+tests
