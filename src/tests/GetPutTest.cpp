@@ -4,6 +4,10 @@
 #include "../Object.h"
 #include "../RiakExceptions.h"
 
+#if defined (_WIN32) 
+#include <windows.h>
+#endif
+
 namespace Riak {
 
 std::string GetPutTest::name = "getput";
@@ -18,7 +22,7 @@ GetPutTest::~GetPutTest() {
 
 void GetPutTest::setup() {
 	getClient().connect();
-	bucket = std::auto_ptr<Bucket>(new Bucket(&getClient(), getTestBucketName()));
+	bucket = std::auto_ptr<Bucket>(new Bucket(getClient(), getTestBucketName()));
 }
 
 void GetPutTest::tearDown() {
@@ -35,7 +39,11 @@ int GetPutTest::runTest() {
 		getClient().store(*bucket, object.getKey(), object);
 	} catch (ConflictedException&) {
 		getClient().del(*bucket, object);
+#if defined (_WIN32) 
+		Sleep(5000);
+#else
 		sleep(5);
+#endif
 		getClient().store(*bucket, object.getKey(), object);
 	} catch (...) {
 		return 1;

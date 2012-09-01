@@ -21,7 +21,7 @@
 #include <string>
 #include "String.h"
 #include "RiakExceptions.h"
-#include "RiackCpp.h"
+#include "RiackCppDefines.h"
 
 namespace Riak {
 
@@ -38,10 +38,12 @@ public:
 	bool connect();
 	bool ping();
 
+	void applyBucketProperties(const Bucket& bucket);
+
 	std::auto_ptr<Object> fetch(const Bucket& bucket, const String& key);
+
 	bool fetch(const Bucket& bucket, Object &object);
 	void store(const Bucket& bucket, const String& key, const Object& object);
-
 	void del(const Bucket& bucket, Object& object);
 
 	Object resolve(Resolver& resolver, ConflictedException& exception);

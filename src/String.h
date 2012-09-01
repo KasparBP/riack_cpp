@@ -18,7 +18,7 @@
 #ifndef RIACKCPP__STRING_H__
 #define RIACKCPP__STRING_H__
 
-#include "RiackCpp.h"
+#include "RiackCppDefines.h"
 #include <string>
 
 namespace Riak {

@@ -15,13 +15,20 @@
    limitations under the License.
 */
 
-#ifndef RIACK_CPP__H__
-#define RIACK_CPP__H__
+#include "RiakExceptions.h"
+#include "Client.h"
 
-class RiakCpp {
-public:
-	static void init();
-	static void cleanup();
-};
+namespace Riak {
 
-#endif //RIACK_CPP__H__
+void ThrowRiackException::throwRiackException(Client& client, int riackStatus) {
+	if (riackStatus == RIACK_ERROR_COMMUNICATION) {
+		throw TransientException("Communication error");
+	} else if (riackStatus == RIACK_ERROR_RESPONSE) {
+		throw ResponseError(client.getRiackClient()->last_error, 
+			client.getRiackClient()->last_error_code);
+	} else if (riackStatus == RIACK_ERROR_INVALID_INPUT) {
+		throw ArgumentsError("Invalid arguments passed to underlying Riack library");
+	}
+}
+
+}

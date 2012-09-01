@@ -25,6 +25,12 @@
 
 namespace Riak {
 
+class Client;
+class ThrowRiackException {
+public:
+	static void throwRiackException(Client& client, int riackStatus);
+};
+
 class TransientException : public std::runtime_error {
 public:
 	explicit TransientException(const std::string& message)

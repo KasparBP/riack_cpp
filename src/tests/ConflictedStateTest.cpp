@@ -7,6 +7,10 @@
 #include <string.h>
 #include <iostream>
 
+#if defined (_WIN32) 
+#include <windows.h>
+#endif
+
 namespace Riak {
 
 std::string ConflictedStateTest::name = "conflicted";
@@ -21,7 +25,7 @@ ConflictedStateTest::~ConflictedStateTest() {
 void ConflictedStateTest::setup() {
 	testKeyName = "ConflictedStateTestKey1";
 	getClient().connect();
-	bucket = std::auto_ptr<Bucket>(new Bucket(&getClient(), getTestBucketName()));
+	bucket = std::auto_ptr<Bucket>(new Bucket(getClient(), getTestBucketName()));
 }
 
 void ConflictedStateTest::tearDown() {
@@ -36,10 +40,14 @@ int ConflictedStateTest::runTest() {
 	Object object(testKeyName);
 	try {
 		getClient().fetch(*bucket, object);
-	} catch (ConflictedException& exception) {
+	} catch (ConflictedException&) {
 		// Leftover conflict most likely, delete and wait for it to propegate
 		getClient().del(*bucket, object);
+#if defined (_WIN32) 
+		Sleep(5000);
+#else
 		sleep(5);
+#endif
 		getClient().fetch(*bucket, object);
 	} catch (std::runtime_error& other) {
 		std::cout << other.what() << std::endl;

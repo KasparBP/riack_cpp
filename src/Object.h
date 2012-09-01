@@ -20,7 +20,7 @@
 
 #include <vector>
 #include <memory>
-#include "RiackCpp.h"
+#include "RiackCppDefines.h"
 #include "String.h"
 
 namespace Riak {

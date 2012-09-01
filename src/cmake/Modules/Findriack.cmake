@@ -12,8 +12,8 @@ if ( RIACK_INCLUDE_DIR AND RIACK_LIBRARIES )
 endif ( RIACK_INCLUDE_DIR AND RIACK_LIBRARIES )
 
 if ( WIN32 )
-   SET (RIACK_INCLUDE_DIRS C:/Development/precompiled-riack)
-   SET (RIACK_LIBRARY_DIRS C:/Development/precompiled-riack)
+   SET (RIACK_INCLUDE_DIRS C:/Development/precompiled-riack/include)
+   SET (RIACK_LIBRARY_DIRS C:/Development/precompiled-riack/lib)
 endif ( WIN32 )
 
 # use pkg-config to get the directories and then use these values

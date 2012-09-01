@@ -32,7 +32,6 @@ Client::Client(const std::string& host, int port) {
 
 Client::~Client() {
 	riack_free(client);
-
 }
 struct RIACK_CLIENT *Client::getRiackClient()
 {
@@ -62,6 +61,9 @@ bool Client::ping()
 		}
 	}
 	return false;
+}
+
+void Client::applyBucketProperties(const Bucket& bucket) {
 }
 
 void Client::store(const Bucket& bucket, const String& key, const Object& object) {

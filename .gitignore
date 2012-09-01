@@ -12,6 +12,16 @@
 *.lai
 *.la
 *.a
+
+/*.vcxproj
+/*.filters
+/*.user
+/*.sdf
+/*.opensdf
+/*.sln
+/*.suo
+ipch/
+
 .project
 .cproject
 CMakeCache.txt

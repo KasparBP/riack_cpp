@@ -21,26 +21,20 @@
 
 namespace Riak {
 
-Bucket::Bucket(Client *client, const String& name) {
-	this->client = client;
+Bucket::Bucket(Client& client, const String& name) : nVal(3), allowMult(false) {
 	this->name = name;
+	getBucketProperties(client);
 }
 
 Bucket::~Bucket() {
 }
 
-Client* Bucket::getClient() {
-	return client;
+void Bucket::getBucketProperties(Client& client) {
+
 }
 
 const String& Bucket::getName() const {
 	return name;
 }
-/*
-std::auto_ptr<Object> Bucket::fetchObject(const String &key) {
-	std::auto_ptr<Object> result = std::auto_ptr<Object>(new Object(this, key));
-	result->fetch();
-	return result;
-}
-*/
+
 } /* namespace Riak */

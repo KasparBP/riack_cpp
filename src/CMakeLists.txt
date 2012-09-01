@@ -4,7 +4,7 @@ project (Riack++)
 SET(RIAK_TEST_SERVER_IP 127.0.0.1)
 SET(RIAK_TEST_SERVER_PB_PORT 8081)
 
-OPTION (BUILD_SHARED_LIBS "Build Shared Libraries" ON)
+OPTION (BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
 
 ENABLE_TESTING()
 
@@ -15,7 +15,10 @@ find_package(riack REQUIRED)
 include_directories(${RIACK_INCLUDE_DIRS})
 set(LIBS ${LIBS} ${RIACK_LIBRARIES})
 
-SET(RIACKCPP_SRC	Client.cpp
+SET(RIACKCPP_SRC	RiackCpp.cpp
+					RiackCpp.h
+					RiackCppDefines.h
+					Client.cpp
 					Client.h
 					Bucket.cpp
 					Bucket.h
@@ -27,6 +30,7 @@ SET(RIACKCPP_SRC	Client.cpp
 					DefaultResolver.h
 					DefaultResolver.cpp
 					RiakExceptions.h
+					RiakExceptions.cpp
 					)
 
 SET(TEST_SRC        tests/TestHandler.cpp

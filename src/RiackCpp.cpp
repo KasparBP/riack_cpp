@@ -15,13 +15,14 @@
    limitations under the License.
 */
 
-#ifndef RIACK_CPP__H__
-#define RIACK_CPP__H__
+#include "RiackCpp.h"
+#include "RiackCppDefines.h"
 
-class RiakCpp {
-public:
-	static void init();
-	static void cleanup();
-};
+void RiakCpp::init() {
+	riack_init();
+}
 
-#endif //RIACK_CPP__H__
+void RiakCpp::cleanup() {
+	riack_cleanup();
+}
+

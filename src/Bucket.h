@@ -27,16 +27,16 @@ class Object;
 
 class Bucket {
 public:
-	Bucket(Client *client, const String& name);
+	Bucket(Client& client, const String& name);
 	virtual ~Bucket();
 
 	const String& getName() const;
-	Client* getClient();
-
-	//std::auto_ptr<Object> fetchObject(const String &key);
 private:
+	void getBucketProperties(Client& client);
 	String name;
-	Client *client;
+
+	uint32_t nVal;
+	bool allowMult;
 };
 
 } /* namespace Riak */
