@@ -31,8 +31,13 @@ public:
 	virtual ~Bucket();
 
 	const String& getName() const;
+
+	uint32_t getNVal() const;
+	bool getAllowMult() const;
+
+	void setNVal(uint32_t nVal);
+	void setAllowMult(bool allowMult);
 private:
-	void getBucketProperties(Client& client);
 	String name;
 
 	uint32_t nVal;

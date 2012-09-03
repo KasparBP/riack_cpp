@@ -23,18 +23,29 @@ namespace Riak {
 
 Bucket::Bucket(Client& client, const String& name) : nVal(3), allowMult(false) {
 	this->name = name;
-	getBucketProperties(client);
 }
 
 Bucket::~Bucket() {
 }
 
-void Bucket::getBucketProperties(Client& client) {
-
-}
-
 const String& Bucket::getName() const {
 	return name;
+}
+
+uint32_t Bucket::getNVal() const {
+	return nVal;
+}
+
+bool Bucket::getAllowMult() const {
+	return allowMult;
+}
+
+void Bucket::setNVal(uint32_t nVal) {
+	this->nVal = nVal;
+}
+
+void Bucket::setAllowMult(bool allowMult) {
+	this->allowMult = allowMult;
 }
 
 } /* namespace Riak */
