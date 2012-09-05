@@ -62,14 +62,14 @@ int ConflictedStateTest::runTest() {
 		return 1;
 	}
 	object.setValue((uint8_t*)value2, strlen(value2));
+	getClient().store(*bucket, testKeyName, object);
 	try {
-		getClient().store(*bucket, testKeyName, object);
+ 		getClient().fetch(*bucket, object);
 	} catch (ConflictedException& exception) {
 		try {
 			DefaultResolver resolver;
 			Object resolved = getClient().resolve(resolver, exception);
 			getClient().store(*bucket, testKeyName, resolved);
-			// Fetch to make sure we are not conflicted
 			return 0;
 		} catch (std::runtime_error& err) {
 			std::cout << err.what() << std::endl;

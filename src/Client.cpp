@@ -91,9 +91,9 @@ void Client::store(const Bucket& bucket, const String& key, const Object& object
 	memset(&returnedObj, 0, sizeof(returnedObj));
 	memset(&riackContent, 0, sizeof(riackContent));
 	memset(&props, 0, sizeof(props));
-	props.return_head_use = 1;
-	props.return_head = 1;
-	riackContent.vtag = object.getVtag().getAsRiackString();
+	// props.return_head_use = 1;
+	// props.return_head = 1;
+	// riackContent.vtag = object.getVtag().getAsRiackString();
 	riackContent.content_type = object.getContentType().getAsRiackString();
 	riackContent.content_encoding = object.getContentEncoding().getAsRiackString();
 	riackContent.data = const_cast<uint8_t*>(object.getValue());
@@ -108,12 +108,6 @@ void Client::store(const Bucket& bucket, const String& key, const Object& object
 	riackResult = riack_put(getRiackClient(), obj, &returnedObj, &props);
 	if (riackResult == RIACK_SUCCESS) {
 		riack_free_object(getRiackClient(), &returnedObj);
-		if (returnedObj.content_count > 1) {
-			// More than one means conflict
-			// do a fetch which will throw a conflicted exception.
-			Object dummy(object);
-			fetch(dummy, bucket, key);
-		}
 	} else {
 		ThrowRiackException::throwRiackException(*this, riackResult);
 	}
@@ -164,8 +158,7 @@ bool Client::fetch(Object &object, const Bucket& bucket, const String& key) {
 			throw ConflictedException(bucket.getName(), key, conflictedObjects);
 		} else if (contentCount > 0) {
 			object.setFromRiackContent(getResult.object.content[0], true);
-			object.setVClock(getResult.object.vclock.clock,
-					getResult.object.vclock.len);
+			object.setVClock(getResult.object.vclock.clock, getResult.object.vclock.len);
 			result = true;
 		}
 		riack_free_get_object(getRiackClient(), &getResult);
