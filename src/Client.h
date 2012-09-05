@@ -39,6 +39,7 @@ public:
 	bool ping();
 
 	void applyBucketProperties(const Bucket& bucket);
+	void fetchBucketProperties(Bucket& bucket);
 
 	std::auto_ptr<Object> fetch(const Bucket& bucket, const String& key);
 

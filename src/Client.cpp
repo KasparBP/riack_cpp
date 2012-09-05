@@ -64,6 +64,21 @@ bool Client::ping()
 }
 
 void Client::applyBucketProperties(const Bucket& bucket) {
+	int riackResult = riack_set_bucket_props(getRiackClient(), bucket.getName().getAsRiackString(), bucket.getNVal(), bucket.getAllowMult() ? 1 : 0);
+	if (riackResult != RIACK_SUCCESS) {
+		ThrowRiackException::throwRiackException(*this, riackResult);
+	}
+}
+
+void Client::fetchBucketProperties(Bucket& bucket) {
+	uint32_t nVal = 3;
+	uint8_t allowMult = 0;
+	int riackResult = riack_get_bucket_props(getRiackClient(), bucket.getName().getAsRiackString(), &nVal, &allowMult);
+	if (riackResult != RIACK_SUCCESS) {
+		ThrowRiackException::throwRiackException(*this, riackResult);
+	}
+	bucket.setAllowMult(allowMult > 0);
+	bucket.setNVal(nVal);
 }
 
 void Client::store(const Bucket& bucket, const String& key, const Object& object) {
@@ -99,12 +114,8 @@ void Client::store(const Bucket& bucket, const String& key, const Object& object
 			Object dummy(object);
 			fetch(dummy, bucket, key);
 		}
-	} else if (riackResult == RIACK_ERROR_COMMUNICATION) {
-		throw TransientException("Communication error");
-	} else if (riackResult == RIACK_ERROR_RESPONSE) {
-		throw ResponseError(getRiackClient()->last_error, getRiackClient()->last_error_code);
-	} else if (riackResult == RIACK_ERROR_INVALID_INPUT) {
-		throw ArgumentsError("Invalid arguments passed to underlying Riack library");
+	} else {
+		ThrowRiackException::throwRiackException(*this, riackResult);
 	}
 }
 
@@ -112,12 +123,8 @@ void Client::del(const Bucket& bucket, Object& object) {
 	int riackResult;
 	riackResult = riack_delete(getRiackClient(), bucket.getName().getAsRiackString(),
 			object.getKey().getAsRiackString(), 0);
-	if (riackResult == RIACK_ERROR_COMMUNICATION) {
-		throw TransientException("Communication error");
-	} else if (riackResult == RIACK_ERROR_RESPONSE) {
-		throw ResponseError(getRiackClient()->last_error, getRiackClient()->last_error_code);
-	} else if (riackResult == RIACK_ERROR_INVALID_INPUT) {
-		throw ArgumentsError("Invalid arguments passed to underlying Riack library");
+	if (riackResult != RIACK_SUCCESS) {
+		ThrowRiackException::throwRiackException(*this, riackResult);
 	}
 }
 
@@ -162,12 +169,8 @@ bool Client::fetch(Object &object, const Bucket& bucket, const String& key) {
 			result = true;
 		}
 		riack_free_get_object(getRiackClient(), &getResult);
-	} else if (riackResult == RIACK_ERROR_COMMUNICATION) {
-		throw TransientException("Communication error");
-	} else if (riackResult == RIACK_ERROR_RESPONSE) {
-		throw ResponseError(getRiackClient()->last_error, getRiackClient()->last_error_code);
-	} else if (riackResult == RIACK_ERROR_INVALID_INPUT) {
-		throw ArgumentsError("Invalid arguments passed to underlying Riack library");
+	}  else {
+		ThrowRiackException::throwRiackException(*this, riackResult);
 	}
 	return result;
 }

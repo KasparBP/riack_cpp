@@ -26,6 +26,9 @@ void ConflictedStateTest::setup() {
 	testKeyName = "ConflictedStateTestKey1";
 	getClient().connect();
 	bucket = std::auto_ptr<Bucket>(new Bucket(getClient(), getTestBucketName()));
+	bucket->setAllowMult(true);
+	bucket->setNVal(3);
+	getClient().applyBucketProperties(*bucket);
 }
 
 void ConflictedStateTest::tearDown() {

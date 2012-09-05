@@ -23,6 +23,9 @@ GetPutTest::~GetPutTest() {
 void GetPutTest::setup() {
 	getClient().connect();
 	bucket = std::auto_ptr<Bucket>(new Bucket(getClient(), getTestBucketName()));
+	bucket->setAllowMult(false);
+	bucket->setNVal(3);
+	getClient().applyBucketProperties(*bucket);
 }
 
 void GetPutTest::tearDown() {
@@ -31,19 +34,11 @@ void GetPutTest::tearDown() {
 
 int GetPutTest::runTest() {
 	char data[] = "test data";
-	Object object("test_key_1__");//getClient().fetch(*bucket, "test_key_1__");
+	Object object("test_key_1__");
 	object.setContentType("application/json");
 	object.setValue((uint8_t*)data, strlen(data));
 
 	try {
-		getClient().store(*bucket, object.getKey(), object);
-	} catch (ConflictedException&) {
-		getClient().del(*bucket, object);
-#if defined (_WIN32) 
-		Sleep(5000);
-#else
-		sleep(5);
-#endif
 		getClient().store(*bucket, object.getKey(), object);
 	} catch (...) {
 		return 1;
