@@ -155,6 +155,7 @@ bool Client::fetch(Object &object, const Bucket& bucket, const String& key) {
 					getResult.object.vclock.len);
 				conflictedObjects.push_back(currentObject);
 			}
+			riack_free_get_object(getRiackClient(), &getResult);
 			throw ConflictedException(bucket.getName(), key, conflictedObjects);
 		} else if (contentCount > 0) {
 			object.setFromRiackContent(getResult.object.content[0], true);
