@@ -34,6 +34,10 @@ void ConflictedStateTest::setup() {
 void ConflictedStateTest::tearDown() {
 	Object object(testKeyName);
 	getClient().del(*bucket, object);
+	bucket->setAllowMult(true);
+	bucket->setNVal(3);
+	getClient().applyBucketProperties(*bucket);
+
 	bucket.reset();
 }
 

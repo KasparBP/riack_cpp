@@ -58,7 +58,7 @@ INSTALL(TARGETS riack++
         DESTINATION lib
         PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
         
-INSTALL(FILES Client.h Bucket.h Object.h String.h Content.h
+INSTALL(FILES Client.h Bucket.h Object.h String.h RiackCpp.h RiackCppDefines.h Resolver.h DefaultResolver.h RiakExceptions.h
         DESTINATION include/riack++
         PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
 
