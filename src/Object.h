@@ -22,6 +22,7 @@
 #include <memory>
 #include "RiackCppDefines.h"
 #include "String.h"
+#include "Metadata.h"
 
 namespace Riak {
 
@@ -56,7 +57,16 @@ public:
 
 	uint8_t* getValue();
 	size_t getValueLength();
+
+	void addMetadata(const Metadata& metadata);
+	bool removeMetadata(const Metadata& metadata);
+	const std::vector<Metadata>& getMetadatas() const;
+
+	void addIndex(const Metadata& index);
+	bool removeIndex(const Metadata& index);
+	const std::vector<Metadata>& getIndexes() const;
 private:
+
 	void reset();
 
 	String vClock;
@@ -69,6 +79,9 @@ private:
 
 	size_t valueLength;
 	uint8_t *value;
+
+	std::vector<Metadata> metadatas;
+	std::vector<Metadata> indexes;
 };
 
 typedef std::auto_ptr<Object> ObjectAutoPtr;

@@ -35,6 +35,8 @@ public:
 	virtual ~String();
 
 	String& operator=(String other);
+	bool operator==(const String &other) const;
+	bool operator!=(const String &other) const;
 
 	std::string toStdString() const;
 

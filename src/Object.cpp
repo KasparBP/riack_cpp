@@ -32,6 +32,8 @@ void swap(Object& first, Object& second) throw()
 	std::swap(first.vtag, first.vtag);
 	std::swap(first.vClock, first.vClock);
 	std::swap(first.key, first.key);
+	std::swap(first.indexes, first.indexes);
+	std::swap(first.metadatas, first.metadatas);
 }
 
 
@@ -47,6 +49,8 @@ Object::Object(const Object& other) :
 	vtag = other.vtag;
 	vClock = other.vClock;
 	key = other.key;
+	metadatas = other.metadatas;
+	indexes = other.indexes;
 }
 
 Object::~Object() {
@@ -135,5 +139,42 @@ const String& Object::getKey() const {
 	return key;
 }
 
+void Object::addIndex(const Metadata& index) {
+	indexes.push_back(index);
+}
+
+bool Object::removeIndex(const Metadata& index) {
+	std::vector<Metadata>::iterator iter = indexes.begin();
+	while (iter != indexes.end()) {
+		if (*iter == index) {
+			indexes.erase(iter);
+			return true;
+		}
+	}
+	return false;
+}
+
+const std::vector<Metadata>& Object::getIndexes() const {
+	return indexes;
+}
+
+void Object::addMetadata(const Metadata& metadata) {
+	metadatas.push_back(metadata);
+}
+
+bool Object::removeMetadata(const Metadata& metadata) {
+	std::vector<Metadata>::iterator iter = metadatas.begin();
+	while (iter != metadatas.end()) {
+		if (*iter == metadata) {
+			metadatas.erase(iter);
+			return true;
+		}
+	}
+	return false;
+}
+
+const std::vector<Metadata>& Object::getMetadatas() const {
+	return metadatas;
+}
 
 } /* namespace Riak */

@@ -26,6 +26,8 @@ SET(RIACKCPP_SRC	RiackCpp.cpp
 					Object.h
 					String.cpp
 					String.h
+					Metadata.cpp
+					Metadata.h
 					Resolver.h
 					DefaultResolver.h
 					DefaultResolver.cpp

@@ -65,6 +65,18 @@ String& String::operator=(String other)
 	return *this;
 }
 
+bool String::operator==(const String &other) const {
+	size_t length = this->getStringLength();
+	if (length == other.getStringLength()) {
+		return (memcmp(this->riackString.value, other.getAsRiackString().value, length) == 0);
+	}
+	return false;
+}
+
+bool String::operator!=(const String &other) const {
+	return !(*this == other);
+}
+
 std::string String::toStdString() const {
 	return std::string(riackString.value, riackString.len);
 }
