@@ -6,8 +6,9 @@ Usable but no links, mapredure or 2i yet.
 ##Requirements
 ### Riack
 Follow the compilation instructions here https://github.com/trifork/riack
-And when it is compiled do a sudo make install if you are on linux or mac.
-On windows.
+
+#### Linux or mac
+When riack is compiled do a 'sudo make install'.
 
 #### Windows
 On windows riack need to be placed in  
@@ -22,12 +23,12 @@ This can be made smart I just have not gotten around to it yet (pull request ver
 ##Compiling
 ###linux and mac  
 move to project folder and do  
-cmake src/
-make
+cmake src/  
+make  
 
 ###Windows
 In a command prompt move to project folder and do the following if you are using visual studio 10  
-cmake src/ -G "Visual Studio 10"
+cmake src/ -G "Visual Studio 10"  
 This will generate a solution file which can be opened and compiled in Visual Studio 10.
 
 ##Usage
