@@ -94,13 +94,52 @@ void Object::setValue(uint8_t *value, size_t valueLength) {
 	memcpy(this->value, value, valueLength);
 }
 
+void Object::setToRiackContent(struct RIACK_CONTENT& content) const {
+	content.content_type = getContentType().getAsRiackString();
+	content.content_encoding = getContentEncoding().getAsRiackString();
+	content.data = const_cast<uint8_t*>(getValue());
+	content.data_len = getValueLength();
+	content.usermeta_count = metadatas.count();
+	if (content.usermeta_count > 0) {
+		content.usermetas = metadatas.getAsRiackPairArray();
+	}
+	content.index_count = indexes.count();
+	if (content.index_count > 0) {
+		content.indexes = indexes.getAsRiackPairArray();
+	}
+}
+
 void Object::setFromRiackContent(const struct RIACK_CONTENT& content, bool hasData) {
 	contentEncoding = content.content_encoding;
 	contentType = content.content_type;
 	vtag = content.vtag;
+	metadatas.clear();
+	for (size_t i=0; i<content.usermeta_count; ++i) {
+		metadatas.addMetadata(content.usermetas[i]);
+	}
+	indexes.clear();
+	for (size_t i=0; i<content.index_count; ++i) {
+		indexes.addMetadata(content.indexes[i]);
+	}
 	if (hasData) {
 		setValue(content.data, content.data_len);
 	}
+}
+
+const MetadataArray& Object::getMetadata() const {
+	return metadatas;
+}
+
+const MetadataArray& Object::getIndexes() const {
+	return indexes;
+}
+
+MetadataArray& Object::getMetadata() {
+	return metadatas;
+}
+
+MetadataArray& Object::getIndexes() {
+	return indexes;
 }
 
 const String& Object::getContentType() const {
@@ -137,44 +176,6 @@ size_t Object::getValueLength() {
 
 const String& Object::getKey() const {
 	return key;
-}
-
-void Object::addIndex(const Metadata& index) {
-	indexes.push_back(index);
-}
-
-bool Object::removeIndex(const Metadata& index) {
-	std::vector<Metadata>::iterator iter = indexes.begin();
-	while (iter != indexes.end()) {
-		if (*iter == index) {
-			indexes.erase(iter);
-			return true;
-		}
-	}
-	return false;
-}
-
-const std::vector<Metadata>& Object::getIndexes() const {
-	return indexes;
-}
-
-void Object::addMetadata(const Metadata& metadata) {
-	metadatas.push_back(metadata);
-}
-
-bool Object::removeMetadata(const Metadata& metadata) {
-	std::vector<Metadata>::iterator iter = metadatas.begin();
-	while (iter != metadatas.end()) {
-		if (*iter == metadata) {
-			metadatas.erase(iter);
-			return true;
-		}
-	}
-	return false;
-}
-
-const std::vector<Metadata>& Object::getMetadatas() const {
-	return metadatas;
 }
 
 } /* namespace Riak */

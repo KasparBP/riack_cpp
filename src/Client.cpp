@@ -91,13 +91,8 @@ void Client::store(const Bucket& bucket, const String& key, const Object& object
 	memset(&returnedObj, 0, sizeof(returnedObj));
 	memset(&riackContent, 0, sizeof(riackContent));
 	memset(&props, 0, sizeof(props));
-	// props.return_head_use = 1;
-	// props.return_head = 1;
-	// riackContent.vtag = object.getVtag().getAsRiackString();
-	riackContent.content_type = object.getContentType().getAsRiackString();
-	riackContent.content_encoding = object.getContentEncoding().getAsRiackString();
-	riackContent.data = const_cast<uint8_t*>(object.getValue());
-	riackContent.data_len = object.getValueLength();
+
+	object.setToRiackContent(riackContent);
 
 	obj.bucket = bucket.getName().getAsRiackString();
 	obj.key = key.getAsRiackString();

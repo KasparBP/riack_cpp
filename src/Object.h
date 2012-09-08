@@ -22,7 +22,7 @@
 #include <memory>
 #include "RiackCppDefines.h"
 #include "String.h"
-#include "Metadata.h"
+#include "MetadataArray.h"
 
 namespace Riak {
 
@@ -41,10 +41,10 @@ public:
 	void setContentEncoding(const String& contentEncoding);
 	void setVtag(const String& vtag);
 	void setValue(uint8_t *value, size_t valueLength);
-
 	void setVClock(uint8_t *clockData, size_t clockLen);
 
 	void setFromRiackContent(const struct RIACK_CONTENT& content, bool hasData);
+	void setToRiackContent(struct RIACK_CONTENT& content) const;
 
 	const String& getContentType() const;
 	const String& getContentEncoding() const;
@@ -58,13 +58,11 @@ public:
 	uint8_t* getValue();
 	size_t getValueLength();
 
-	void addMetadata(const Metadata& metadata);
-	bool removeMetadata(const Metadata& metadata);
-	const std::vector<Metadata>& getMetadatas() const;
+	const MetadataArray& getMetadata() const;
+	const MetadataArray& getIndexes() const;
 
-	void addIndex(const Metadata& index);
-	bool removeIndex(const Metadata& index);
-	const std::vector<Metadata>& getIndexes() const;
+	MetadataArray& getMetadata();
+	MetadataArray& getIndexes();
 private:
 
 	void reset();
@@ -80,8 +78,8 @@ private:
 	size_t valueLength;
 	uint8_t *value;
 
-	std::vector<Metadata> metadatas;
-	std::vector<Metadata> indexes;
+	MetadataArray metadatas;
+	MetadataArray indexes;
 };
 
 typedef std::auto_ptr<Object> ObjectAutoPtr;

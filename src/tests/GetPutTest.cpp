@@ -34,10 +34,12 @@ void GetPutTest::tearDown() {
 
 int GetPutTest::runTest() {
 	char data[] = "test data";
+	Metadata metaIn(String("meta1"), String("metaval"));
 	Object object("test_key_1__");
 	object.setContentType("application/json");
 	object.setValue((uint8_t*)data, strlen(data));
-
+	object.getMetadata().addMetadata(metaIn);
+	object.getMetadata().addMetadata(Metadata(String("dummy"),String("dummy")));
 	try {
 		getClient().store(*bucket, object.getKey(), object);
 	} catch (...) {
@@ -48,6 +50,17 @@ int GetPutTest::runTest() {
 		if (strlen(data) != object.getValueLength() ||
 			memcmp(data, object.getValue(), strlen(data)) != 0) {
 			return 2;
+		}
+		bool foundMeta = false;
+		std::vector<Metadata>::const_iterator metaIter = object.getMetadata().getMetadatas().begin();
+		while (metaIter != object.getMetadata().getMetadatas().end()) {
+			if (*metaIter == metaIn) {
+				foundMeta = true;
+			}
+			++metaIter;
+		}
+		if (!foundMeta) {
+			return 4;
 		}
 	} else {
 		return 3;

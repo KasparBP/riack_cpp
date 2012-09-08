@@ -28,6 +28,8 @@ SET(RIACKCPP_SRC	RiackCpp.cpp
 					String.h
 					Metadata.cpp
 					Metadata.h
+					MetadataArray.cpp
+					MetadataArray.h
 					Resolver.h
 					DefaultResolver.h
 					DefaultResolver.cpp
