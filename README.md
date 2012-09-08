@@ -36,11 +36,13 @@ This will generate a solution file which can be opened and compiled in Visual St
 run 'sudo make install'
 this should install all headers and lib file.  
 
-Link your project with libriack++.a or .dylib
+Link your project with libriack++.a or .dylib  
 Include  
+```
 <riack++/Client.h>
 <riack++/Object.h>
-And so on as needed.
+```
+and so on as needed.
 
 ###Windows
 Either pull in all the sources to your project or take the .a/.lib and the headers.
