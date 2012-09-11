@@ -22,9 +22,14 @@
 #include <memory>
 #include "RiackCppDefines.h"
 #include "String.h"
-#include "MetadataArray.h"
+#include "Metadata.h"
+#include "Link.h"
+#include "RiackEntityArray.h"
 
 namespace Riak {
+
+typedef RiackEntityArray<struct RIACK_PAIR, Metadata> MetadataArray;
+typedef RiackEntityArray<struct RIACK_PAIR, Metadata> LinkArray;
 
 class Object {
 	friend void swap(Object& first, Object& second) throw();
@@ -58,11 +63,10 @@ public:
 	uint8_t* getValue();
 	size_t getValueLength();
 
-	const MetadataArray& getMetadata() const;
-	const MetadataArray& getIndexes() const;
-
-	MetadataArray& getMetadata();
 	MetadataArray& getIndexes();
+	MetadataArray& getMetadata();
+	const MetadataArray& getIndexes() const;
+	const MetadataArray& getMetadata() const;
 private:
 
 	void reset();
@@ -78,8 +82,12 @@ private:
 	size_t valueLength;
 	uint8_t *value;
 
-	MetadataArray metadatas;
+	//MetadataArray metadatas;
+	//MetadataArray indexes;
+
 	MetadataArray indexes;
+	MetadataArray metadatas;
+	LinkArray links;
 };
 
 typedef std::auto_ptr<Object> ObjectAutoPtr;

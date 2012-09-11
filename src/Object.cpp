@@ -57,7 +57,6 @@ Object::~Object() {
 	reset();
 }
 
-
 Object& Object::operator=(Object other) {
 	std::swap(*this, other);
 	return *this;
@@ -101,11 +100,11 @@ void Object::setToRiackContent(struct RIACK_CONTENT& content) const {
 	content.data_len = getValueLength();
 	content.usermeta_count = metadatas.count();
 	if (content.usermeta_count > 0) {
-		content.usermetas = metadatas.getAsRiackPairArray();
+		content.usermetas = metadatas.getAsRiackEntityArray();
 	}
 	content.index_count = indexes.count();
 	if (content.index_count > 0) {
-		content.indexes = indexes.getAsRiackPairArray();
+		content.indexes = indexes.getAsRiackEntityArray();
 	}
 }
 
@@ -115,16 +114,17 @@ void Object::setFromRiackContent(const struct RIACK_CONTENT& content, bool hasDa
 	vtag = content.vtag;
 	metadatas.clear();
 	for (size_t i=0; i<content.usermeta_count; ++i) {
-		metadatas.addMetadata(content.usermetas[i]);
+		metadatas.addEntity(Metadata(content.usermetas[i]));
 	}
 	indexes.clear();
 	for (size_t i=0; i<content.index_count; ++i) {
-		indexes.addMetadata(content.indexes[i]);
+		indexes.addEntity(Metadata(content.indexes[i]));
 	}
 	if (hasData) {
 		setValue(content.data, content.data_len);
 	}
 }
+
 
 const MetadataArray& Object::getMetadata() const {
 	return metadatas;

@@ -19,10 +19,10 @@
 #define METADATA_H_
 
 #include "String.h"
+#include "RiackEntity.h"
 
 namespace Riak {
-
-class Metadata {
+class Metadata : public RiackEntity<struct RIACK_PAIR> {
 	friend void swap(Metadata& first, Metadata& second) throw();
 public:
 	Metadata(const Metadata& other);
@@ -42,7 +42,8 @@ public:
 	size_t getLength() const;
 	const uint8_t* getValue() const;
 
-	struct RIACK_PAIR getAsRiackPair() const;
+//	struct RIACK_PAIR getAsRiackPair() const;
+	virtual struct RIACK_PAIR getAsRiackEntity() const;
 private:
 	void reset();
 	String key;

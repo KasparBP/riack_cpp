@@ -71,9 +71,7 @@ void Metadata::setValue(const uint8_t* value, size_t length) {
 	valueLength = length;
 	if (length > 0) {
 		this->value = new uint8_t[valueLength];
-		if (this->value != NULL) {
-			memcpy(this->value, value, valueLength);
-		}
+		memcpy(this->value, value, valueLength);
 	}
 }
 
@@ -105,7 +103,7 @@ const uint8_t* Metadata::getValue() const {
 	return value;
 }
 
-struct RIACK_PAIR Metadata::getAsRiackPair() const {
+struct RIACK_PAIR Metadata::getAsRiackEntity() const {
 	struct RIACK_PAIR result;
 	result.key = key.getAsRiackString();
 	if (valueLength > 0) {
@@ -114,6 +112,7 @@ struct RIACK_PAIR Metadata::getAsRiackPair() const {
 		result.value_len = valueLength;
 	} else {
 		result.value_present = 0;
+		result.value_len = 0;
 	}
 
 	return result;

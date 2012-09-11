@@ -26,15 +26,17 @@ SET(RIACKCPP_SRC	RiackCpp.cpp
 					Object.h
 					String.cpp
 					String.h
+					Link.cpp
+					Link.h
 					Metadata.cpp
 					Metadata.h
-					MetadataArray.cpp
-					MetadataArray.h
 					Resolver.h
 					DefaultResolver.h
 					DefaultResolver.cpp
 					RiakExceptions.h
 					RiakExceptions.cpp
+					RiackEntity.h
+					RiackEntityArray.h
 					)
 
 SET(TEST_SRC        tests/TestHandler.cpp
