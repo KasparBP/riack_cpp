@@ -1,7 +1,6 @@
 #riack_++
-
 ##Status
-Usable but no links, mapredure or 2i yet.
+No longer maintained use 
 
 ##Requirements
 ### Riack
