@@ -1,6 +1,7 @@
 #riack_++
+
 ##Status
-No longer maintained use 
+No longer maintained. 
 
 ##Requirements
 ### Riack
